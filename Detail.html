@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Producto - Gossip Cases</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="Home.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container-fluid px-3">
+            <a class="navbar-brand" href="/Home.html">Gossip Cases</a>
+
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
+                            data-bs-toggle="dropdown">
+                            Categorías
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <li><a class="dropdown-item" href="/Cargadores.html">Cargadores</a></li>
+                            <li><a class="dropdown-item" href="/Airpods.html">AirPods</a></li>
+                            <li><a class="dropdown-item" href="/Fundas.html">Fundas</a></li>
+                            <li><a class="dropdown-item" href="/Gossip-exclusive.html">Gossip Exclusive Cases</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mb-5">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm">
+                    <img id="detailImage" src="" alt="Producto" class="card-img-top product-img">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm p-4 h-100">
+                    <div class="card-body">
+                        <h2 id="detailTitle" class="mb-3"></h2>
+                        <div id="detailRating" class="modal-rating mb-3"></div>
+                        <div id="detailPrice" class="modal-price mb-3"></div>
+                        <p id="detailDescription" class="text-muted mb-4"></p>
+
+                        <div class="modal-specs mb-4">
+                            <h6>Información del Producto</h6>
+                            <p class="mb-2"><strong>Categoría:</strong> <span id="detailCategory"></span></p>
+                            <p class="mb-2"><strong>Disponibilidad:</strong> En stock</p>
+                        </div>
+
+                        <button class="btn btn-primary w-100 mb-3"><i class="fas fa-shopping-bag"></i> Comprar
+                            Ahora</button>
+                        <button class="btn btn-outline-primary w-100"><i class="fas fa-cart-plus"></i> Agregar al
+                            Carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- ===================================
+     FOOTER
+=================================== -->
+
+    <footer class="footer-custom">
+
+        <div class="container">
+
+            <div class="row align-items-center gy-4">
+
+                <!-- BRAND -->
+
+                <div class="col-lg-4 text-center text-lg-start">
+
+                    <h3 class="footer-logo">
+                        Gossip Cases
+                    </h3>
+
+                    <p class="footer-text mb-0">
+                        Accesorios y fundas exclusivas para iPhone.
+                    </p>
+
+                </div>
+
+                <!-- SOCIAL -->
+
+                <div class="col-lg-4 text-center">
+
+                    <div class="footer-socials">
+
+                        <a href="https://instagram.com" target="_blank" class="footer-icon">
+
+                            <i class="fab fa-instagram"></i>
+
+                        </a>
+
+                        <a href="https://wa.me/5491111111111" target="_blank" class="footer-icon">
+
+                            <i class="fab fa-whatsapp"></i>
+
+                        </a>
+
+                        <a href="https://tiktok.com" target="_blank" class="footer-icon">
+
+                            <i class="fab fa-tiktok"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- COPYRIGHT -->
+
+                <div class="col-lg-4 text-center text-lg-end">
+
+                    <p class="footer-copy mb-0">
+                        © 2026 Gossip Cases · Todos los derechos reservados
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const products = {
+            'fundas': {
+                title: 'Funda Transparente Antigolpes',
+                price: '$19.50',
+                image: '/fundas.png',
+                description: 'Funda transparente resistente con bordes reforzados y diseño slim. Compatible con casi todos los modelos de smartphones.',
+                category: 'Fundas',
+            },
+            'cargadores': {
+                title: 'Cargador USB-C Doble 65W',
+                price: '$34.00',
+                image: '/cargadores.png',
+                description: 'Cargador doble USB-C de 65W con carga rápida compatible con iPhone y Android. Incluye cable trenzado.',
+                category: 'Cargadores',
+            },
+            'airpods': {
+                title: 'Estuche Premium AirPods',
+                price: '$29.00',
+                image: '/airpods.png',
+                description: 'Estuche rígido para AirPods con diseño elegante y agarre suave. Protege contra golpes y rasguños.',
+                category: 'AirPods',
+            },
+            'gossip': {
+                title: 'Gossip Exclusive Case Glow',
+                price: '$39.00',
+                image: '/gossip-exclusive.png',
+                description: 'Funda exclusive Gossip con diseño glow, bordes reforzados y acabado premium. Ideal para destacar tu celular.',
+                category: 'Gossip Exclusive Cases',
+            }
+        };
+
+        function getProductKey() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('prod');
+        }
+
+        function loadProduct() {
+            const key = getProductKey();
+            const product = products[key];
+
+            if (!product) {
+                document.querySelector('main').innerHTML = '<div class="alert alert-warning text-center">Producto no encontrado. <a href="Home.html">Volver al catálogo</a></div>';
+                return;
+            }
+
+            document.getElementById('detailTitle').textContent = product.title;
+            document.getElementById('detailPrice').textContent = product.price;
+            document.getElementById('detailImage').src = product.image;
+            document.getElementById('detailDescription').textContent = product.description;
+            document.getElementById('detailCategory').textContent = product.category;
+        }
+
+        loadProduct();
+    </script>
+</body>
+
+</html>
