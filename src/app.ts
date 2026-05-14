@@ -17,7 +17,7 @@ sequelize.authenticate()
     console.log('Database connected');
   })
   .catch((err) => {
-    // Silently ignore DB connection errors for development without DB
+    // Ignore DB connection errors for development without DB
     console.log('Database not available (development mode)');
   });
 
