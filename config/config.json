@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "1234",
+    "database": "gossip_ecommerce",
+    "host": "localhost",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "test": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "gossip_ecommerce_test",
+    "host": "localhost",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "production": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "gossip_ecommerce",
+    "host": "localhost",
+    "dialect": "postgres",
+    "logging": false
+  }
+}
