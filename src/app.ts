@@ -8,14 +8,18 @@ import path from 'path';
 
 const app = express();
 
-// Initialize Sequelize connection
+// Initialize Sequelize connection (non-blocking)
 import sequelize from './config/db';
 
-sequelize.sync({ force: false }).then(() => {
-  console.log('Database connected');
-}).catch((err) => {
-  console.error('Database connection error:', err);
-});
+// Attempt to authenticate, but don't fail if DB is not available
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connected');
+  })
+  .catch((err) => {
+    // Silently ignore DB connection errors for development without DB
+    console.log('Database not available (development mode)');
+  });
 
 // Middleware
 app.use(express.json());

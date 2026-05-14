@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/db';
-import Category from '../models/category';
+
 
 const categories = [
   {

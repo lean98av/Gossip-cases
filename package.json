@@ -10,7 +10,8 @@
     "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "migrate:migrate:create": "sequelize-cli migrate:create"
   },
   "keywords": [
     "ecommerce",
