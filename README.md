@@ -58,7 +58,7 @@ DB_PASSWORD=tu_contraseña_postgres
 ADMIN_PASS=admin123
 
 # Server Configuration
-PORT=3000
+PORT=3001
 ```
 
 ## Comandos
@@ -132,7 +132,7 @@ src/
 npm run dev
 ```
 
-El servidor se ejecuta en `http://localhost:3000`
+El servidor se ejecuta en `http://localhost:3001`
 
 ## Notas Importantes
 

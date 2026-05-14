@@ -1,11 +1,10 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
-dotenv.config();
 
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'gossip_ecommerce',
   process.env.DB_USER || 'postgres',
-  process.env.DB_PASSWORD || '',
+  process.env.DB_PASSWORD || '1234',
   {
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
@@ -19,5 +18,13 @@ const sequelize = new Sequelize(
     },
   }
 );
+
+
+
+sequelize.sync({ force: false }).then(() => {
+  console.log('Tablas sincronizadas');
+}).catch((err) => {
+  console.error('Error sincronizando tablas:', err);
+});
 
 export default sequelize;
