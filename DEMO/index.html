@@ -16,8 +16,12 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container-fluid px-3">
-            <a class="navbar-brand" href="/index.html">Gossip Cases</a>
 
+            <a class="navbar-brand" href="/index.html">
+                <h3 class="footer-logo">
+                    Gossip Cases
+                </h3>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -42,57 +46,75 @@
     </nav>
 
     <!-- HERO BANNER -->
-    <section class="hero-box text-center text-dark">
+    <section class="hero-banner text-center text-dark py-5">
         <div class="container">
-            <h1>Cargadores</h1>
+            <h1>Accesorios para celulares</h1>
+            <p class="hero-subtitle mb-4">Pedidos personalizados por encargo<br>Podés pedir más diseños que no
+                estén en el catálogo</p>
+            <div class="hero-cta d-inline-block py-2 px-4 rounded-pill">STOCK LIMITADO</div>
         </div>
     </section>
 
     <!-- MAIN CONTENT -->
-    <div class="container mt-4">
-        <!-- FILTROS -->
-        <div class="filters-section">
-            <div class="row g-3">
-                <div class="col-md-4 col-sm-6">
-                    <label class="form-label fw-bold">Precio</label>
-                    <select class="form-select form-select-sm">
-                        <option>Cualquier precio</option>
-                        <option>Menos de $50</option>
-                        <option>$50 - $120</option>
-                        <option>Más de $120</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+    <!-- MAIN CONTENT -->
+    <div class="container mt-4 mb-5">
 
-        <!-- GRID DE PRODUCTOS -->
-        <div class="row g-4 mb-5">
-            <!-- Producto 1 -->
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <a href="Detail.html?prod=cargadores" class="text-decoration-none text-reset">
-                    <div class="card product-card">
-                        <img src="/cargadores.png" class="card-img-top product-img" alt="Cargador Qi">
-                        <div class="card-body">
-                            <div class="product-price">$29.99</div>
-                            <h6 class="card-title product-title">Cargador Inalámbrico Rápido Qi</h6>
-                        </div>
+        <div class="row g-4">
+
+            <!-- CARGADORES -->
+            <div class="col-md-6">
+                <a href="Cargadores.html" class="category-card">
+
+                    <img src="/cargadores.png" alt="Cargadores">
+
+                    <div class="category-overlay">
+                        <h2>Cargadores</h2>
                     </div>
+
                 </a>
             </div>
 
-            <!-- Producto 2 -->
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <a href="Detail.html?prod=cargadores" class="text-decoration-none text-reset">
-                    <div class="card product-card">
-                        <img src="/cargadores.png" class="card-img-top product-img" alt="AirPods">
-                        <div class="card-body">
-                            <div class="product-price">$199.00</div>
-                            <h6 class="card-title product-title">AirPods Pro 2a Generación</h6>
-                        </div>
+            <!-- AIRPODS -->
+            <div class="col-md-6">
+                <a href="Airpods.html" class="category-card">
+
+                    <img src="/airpods.png" alt="AirPods">
+
+                    <div class="category-overlay">
+                        <h2>AirPods</h2>
                     </div>
+
                 </a>
             </div>
+
+            <!-- FUNDAS -->
+            <div class="col-md-6">
+                <a href="Fundas.html" class="category-card">
+
+                    <img src="/fundas.png" alt="Fundas">
+
+                    <div class="category-overlay">
+                        <h2>Fundas</h2>
+                    </div>
+
+                </a>
+            </div>
+
+            <!-- GOSSIP -->
+            <div class="col-md-6">
+                <a href="Gossip-exclusive.html" class="category-card">
+
+                    <img src="/gossip-exclusive.png" alt="Gossip Exclusive">
+
+                    <div class="category-overlay">
+                        <h2>Gossip Exclusive</h2>
+                    </div>
+
+                </a>
+            </div>
+
         </div>
+
     </div>
     <!-- ===================================
      FOOTER
