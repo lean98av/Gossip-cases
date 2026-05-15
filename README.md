@@ -29,6 +29,8 @@ npm install
 ## Configuración
 
 ### 1. Base de Datos PostgreSQL
+para iniciar el servidor de postgre ejecutá en cmd como administrador:
+net start postgresql-x64-18
 
 Crea una base de datos:
 
