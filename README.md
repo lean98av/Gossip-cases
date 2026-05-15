@@ -71,7 +71,9 @@ PORT=3001
 | `npm run build` | **Compilar** - Compila TypeScript a JavaScript |
 | `npm start` | **Producción** - Ejecuta la versión compilada |
 | `npm run migrate` | Ejecutar migraciones de la base de datos |
-| `npm run seed` | Inyectar datos iniciales (categorías) |
+
+en /seeders
+ejecutar esos scripts para tener categorias y productos de prueba
 
 ## Estructura del Proyecto
 
