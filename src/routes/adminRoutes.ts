@@ -1,12 +1,14 @@
 import { Router, Response, NextFunction } from 'express';
+import adminController from '../controllers/adminController';
 import Product, { ProductAttributes } from '../models/product';
 import Order, { OrderAttributes } from '../models/order';
 import { Request } from 'express';
 
 const router = Router();
 
-router.use((req: { query: { pass?: string } }, res: Response, next: NextFunction) => {
-  const pass = (req as any).query?.pass;
+// Middleware de autenticación para rutas protegidas
+const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const pass = req.query?.pass;
   const ADMIN_PASS = process.env.ADMIN_PASS || 'admin123';
 
   if (pass !== ADMIN_PASS) {
@@ -15,31 +17,23 @@ router.use((req: { query: { pass?: string } }, res: Response, next: NextFunction
   }
 
   next();
+};
+
+// Rutas del admin panel (todas protegidas por autenticación)
+router.get('/', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+  await adminController.home(req, res, next);
 });
 
-router.get('/products', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const products = await Product.findAll({
-      include: [{ model: Product, as: 'category' }],
-    });
-
-    res.json({ success: true, data: products });
-  } catch (error) {
-    next(error);
-  }
+router.get('/products', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+  await adminController.adminProducts(req, res, next);
 });
 
-router.get('/orders', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const orders = await Order.findAll({
-      include: [{ model: Product, as: 'products' }],
-      order: [['createdAt', 'DESC']],
-    });
+router.post('/products', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+  await adminController.createProduct(req, res, next);
+});
 
-    res.json({ success: true, data: orders });
-  } catch (error) {
-    next(error);
-  }
+router.get('/orders', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+  await adminController.adminOrders(req, res, next);
 });
 
 export default router;

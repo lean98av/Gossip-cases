@@ -10,7 +10,10 @@ import sequelize from './config/db';
 
 // Setup views
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '../src/views'));
+app.set('views', [
+  path.join(__dirname, '../src/views'),
+  path.join(__dirname, '../src/views/admin'),
+]);
 
 // Attempt to authenticate, but don't fail if DB is not available
 sequelize.authenticate()
@@ -55,21 +58,18 @@ app.get('/_server', (req: Request, res: Response) => {
 import productRoutes from './routes/productRoutes';
 import searchRoutes from './routes/searchRoutes';
 import cartRoutes from './routes/cartRoutes';
-import authRoutes from './routes/authRoutes';
 import adminRoutes from './routes/adminRoutes';
 
 // Public Routes
 app.use('/api/products', productRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/admin', adminRoutes);
 
 // Home Routes
 import homeRoutes from './routes/homeRoutes';
 app.use(homeRoutes);
 
-console.log('Routes registrados en app');
 
 // Home Route
 app.get('/', HomeController.home);
