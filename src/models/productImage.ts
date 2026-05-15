@@ -11,16 +11,9 @@ export interface ProductImageAttributes {
   updatedAt: Date;
 }
 
-export interface ProductImageCreationAttrs {
-  id?: number | undefined;
-  productId?: number | undefined;
-  name: string;
-  file: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+export interface ProductImageCreationAttrs extends Optional<ProductImageAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-export class ProductImage extends Model<ProductImageAttributes> {
+export class ProductImage extends Model<ProductImageAttributes, ProductImageCreationAttrs> {
   public id!: number;
   public productId!: number;
   public name!: string;
@@ -98,11 +91,6 @@ Product.hasMany(ProductImage, {
 ProductImage.belongsTo(Product, {
   foreignKey: 'productId',
   as: 'product',
-});
-
-Product.hasMany(Product, {
-  foreignKey: 'imageId',
-  as: 'productReferences',
 });
 
 export default ProductImage;

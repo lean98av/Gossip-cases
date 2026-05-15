@@ -8,10 +8,7 @@ import path from 'path';
 
 export default {
   upload: multer({
-    storage: multer.diskStorage({
-      destination: (req: any, file: any, cb: any) => cb(null, path.join(__dirname, '../../uploads/')),
-      filename: (req: any, file: any, cb: any) => cb(null, Date.now() + '-' + file.originalname, file),
-    }),
+    storage: multer.memoryStorage(),
     limits: { fileSize: 2 * 1024 * 1024 },
     fileFilter: (req: any, file: any, cb: any) => {
       const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -36,7 +33,10 @@ export default {
   async adminProducts(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Product.findAll({
-        include: [{ model: Category, as: 'category' }],
+        include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
       });
 
       res.render('admin/adminProducts', {
@@ -48,7 +48,7 @@ export default {
     }
   },
 
-async createProduct(req: Request, res: Response, next: NextFunction) {
+  async createProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, price, categoryId, description, showToClients, outStock } = req.body;
 
@@ -59,30 +59,117 @@ async createProduct(req: Request, res: Response, next: NextFunction) {
         description,
         showToClients: showToClients === 'true',
         outStock: outStock === 'true',
-      } as any;
+      };
 
-      // Create image record first so we can get the ID
-      if (req.file) {
-        const image = await ProductImage.create({
-          name: req.file.originalname,
-          file: req.file.buffer.toString('base64'),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
+      const product = await Product.create(productData);
 
-        // Get the image ID for the reference
-        const { id: imageId } = image;
-
-        // Create product with reference to image
-        const product = await Product.create({
-          ...productData,
-          imageId: imageId,
-        });
-      } else {
-        const product = await Product.create(productData);
+      // Create image records if files were uploaded
+      if (req.files && (req.files as Express.Multer.File[]).length > 0) {
+        const files = req.files as Express.Multer.File[];
+        for (const file of files) {
+          await ProductImage.create({
+            productId: product.id,
+            name: file.originalname,
+            file: file.buffer.toString('base64'),
+          });
+        }
       }
 
       res.json({ success: true, data: product });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async editProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const { name, price, categoryId, description, showToClients, outStock, deleteImages } = req.body;
+
+      const product = await Product.findByPk(id);
+      if (!product) {
+        res.status(404).json({ success: false, message: 'Producto no encontrado' });
+        return;
+      }
+
+      // Update product data
+      await product.update({
+        name,
+        price: parseFloat(price),
+        categoryId: parseInt(categoryId),
+        description,
+        showToClients: showToClients === 'true',
+        outStock: outStock === 'true',
+      });
+
+      // Delete images if specified
+      if (deleteImages && Array.isArray(deleteImages)) {
+        await ProductImage.destroy({
+          where: {
+            id: deleteImages,
+            productId: id,
+          },
+        });
+      }
+
+      // Add new images if uploaded
+      if (req.files && (req.files as Express.Multer.File[]).length > 0) {
+        const files = req.files as Express.Multer.File[];
+        for (const file of files) {
+          await ProductImage.create({
+            productId: product.id,
+            name: file.originalname,
+            file: file.buffer.toString('base64'),
+          });
+        }
+      }
+
+      res.json({ success: true, data: product });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async getProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const product = await Product.findByPk(id, {
+        include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
+      });
+
+      if (!product) {
+        res.status(404).json({ success: false, message: 'Producto no encontrado' });
+        return;
+      }
+
+      res.json({ success: true, data: product });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async deleteProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const product = await Product.findByPk(id);
+
+      if (!product) {
+        res.status(404).json({ success: false, message: 'Producto no encontrado' });
+        return;
+      }
+
+      // Delete associated images
+      await ProductImage.destroy({
+        where: { productId: id },
+      });
+
+      // Delete product
+      await product.destroy();
+
+      res.json({ success: true, message: 'Producto eliminado correctamente' });
     } catch (error) {
       next(error);
     }

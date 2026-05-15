@@ -8,7 +8,6 @@ export interface ProductAttributes {
   name: string;
   price: number;
   description?: string;
-  imageId?: number;
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
@@ -20,7 +19,6 @@ export interface ProductCreationAttrs extends Optional<ProductAttributes, 'id' |
   name: string;
   price: number;
   description?: string;
-  imageId?: number;
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
@@ -29,7 +27,7 @@ export interface ProductCreationAttrs extends Optional<ProductAttributes, 'id' |
   updatedAt?: undefined;
 }
 
-export class Product extends Model<ProductAttributes> {
+export class Product extends Model<ProductAttributes, ProductCreationAttrs> {
   public id!: number;
   public name!: string;
   public price!: number;
@@ -73,16 +71,6 @@ Product.init(
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    imageId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'product_images',
-        key: 'id',
-      },
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
     },
     categoryId: {
       type: DataTypes.INTEGER,
