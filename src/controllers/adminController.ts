@@ -29,6 +29,26 @@ export default {
     }
   },
 
+  async createProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { name, price, categoryId, description } = req.body;
+
+      const product = await Product.create({
+        name,
+        price: parseFloat(price),
+        categoryId: parseInt(categoryId),
+        description,
+        showToClients: true,
+        outStock: false,
+        image: null,
+      });
+
+      res.json({ success: true, data: product });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async adminOrders(req: Request, res: Response, next: NextFunction) {
     try {
       const orders = await Order.findAll({

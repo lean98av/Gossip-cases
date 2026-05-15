@@ -28,6 +28,10 @@ router.get('/products', authMiddleware, async (req: Request, res: Response, next
   await adminController.adminProducts(req, res, next);
 });
 
+router.post('/products', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+  await adminController.createProduct(req, res, next);
+});
+
 router.get('/orders', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   await adminController.adminOrders(req, res, next);
 });
