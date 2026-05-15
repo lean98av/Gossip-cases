@@ -18,6 +18,10 @@ const categories = [
     name: 'Gossip Cases cargadores',
     description: 'Casas y fundas para cargadores y power banks',
   },
+  {
+    name: 'Stock diponible',
+    description: 'Productos con stock disponible para envío inmediato',
+  },
 ];
 
 export default {
