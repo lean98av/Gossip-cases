@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%- title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">Gossip Cases</a>
+    </div>
+  </nav>
+
+  <!-- Admin Panel -->
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1><%- title %></h1>
+      <a href="/admin" class="btn btn-secondary">
+        ← Volver al Inicio
+      </a>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert alert-danger">
+        <strong>Error:</strong> <%= error %>
+      </div>
+    <% } %>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><%= title.includes('Create') ? 'Crear Producto' : 'Editar Producto' %></h4>
+          </div>
+          <div class="card-body">
+            <form id="productForm">
+              <div class="mb-3">
+                <label for="productName" class="form-label">Nombre *</label>
+                <input type="text" class="form-control" id="productName" required>
+                <div class="invalid-feedback">
+                  El nombre es requerido
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="productPrice" class="form-label">Precio *</label>
+                <input type="number" step="0.01" class="form-control" id="productPrice" required>
+                <div class="invalid-feedback">
+                  El precio es requerido
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="productImage" class="form-label">Imagen</label>
+                <input type="file" class="form-control" id="productImage" accept="image/*">
+                <div class="form-text">
+                  Soporta imágenes JPG, PNG, GIF. Máximo 2MB.
+                </div>
+                <div id="imagePreview" class="mt-2" style="display: none;">
+                  <img id="imagePreviewImg" src="" alt="Vista previa" style="max-height: 200px;">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="productCategoryId" class="form-label">Categoría *</label>
+                <select class="form-select" id="productCategoryId" required>
+                  <option value="">Selecciona una categoría</option>
+                </select>
+                <div class="invalid-feedback">
+                  La categoría es requerida
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="productDescription" class="form-label">Descripción</label>
+                <textarea class="form-control" id="productDescription" rows="3"></textarea>
+              </div>
+
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="showToClients" checked>
+                <label class="form-check-label" for="showToClients">
+                  Mostrar al cliente
+                </label>
+              </div>
+
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="outStock" checked>
+                <label class="form-check-label" for="outStock">
+                  Sin Stock
+                </label>
+              </div>
+
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                  <%= title.includes('Create') ? 'Crear Producto' : 'Actualizar Producto' %>
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-0">&copy; 2024 Gossip Cases. Panel de Administración.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Populate category dropdown
+    const categorySelect = document.getElementById('productCategoryId');
+    const categories = [
+      <% products.forEach(p => { if (p.category) { %>
+        { value: "<%= p.category.id %>", text: "<%= p.category.name %>" },
+      <% }) %><% if (products.length === 0) { %>
+        { value: "1", text: "Gossip Cases cargadores" },
+        { value: "2", text: "Gossip Cases AirPods" },
+        { value: "3", text: "Catálogo Fundas iP." },
+        { value: "4", text: "catálogo exclusivo" },
+        { value: "5", text: "stock disponible" },
+      <% } %>
+    ];
+    categories.forEach(cat => {
+      categorySelect.innerHTML += `<option value="${cat.value}">${cat.text}</option>`;
+    });
+
+    // Image preview
+    document.getElementById('productImage').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('imagePreview');
+          const img = document.getElementById('imagePreviewImg');
+          preview.style.display = 'block';
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Form validation
+    const form = document.getElementById('productForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Validate required fields
+      const name = document.getElementById('productName').value.trim();
+      const price = document.getElementById('productPrice').value;
+      const categoryId = document.getElementById('productCategoryId').value;
+      const description = document.getElementById('productDescription').value.trim();
+      const showToClients = document.getElementById('showToClients').checked;
+      const outStock = document.getElementById('outStock').checked;
+      const imageFile = document.getElementById('productImage').files[0];
+
+      // Validate name
+      if (!name) {
+        document.getElementById('productName').classList.add('is-invalid');
+        return;
+      } else {
+        document.getElementById('productName').classList.remove('is-invalid');
+      }
+
+      // Validate price
+      if (!price || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
+        document.getElementById('productPrice').classList.add('is-invalid');
+        return;
+      } else {
+        document.getElementById('productPrice').classList.remove('is-invalid');
+      }
+
+      // Validate category
+      if (!categoryId) {
+        document.getElementById('productCategoryId').classList.add('is-invalid');
+        return;
+      } else {
+        document.getElementById('productCategoryId').classList.remove('is-invalid');
+      }
+
+      // Validate description
+      if (!description) {
+        document.getElementById('productDescription').classList.add('is-invalid');
+        return;
+      } else {
+        document.getElementById('productDescription').classList.remove('is-invalid');
+      }
+
+      // Image validation
+      if (imageFile) {
+        if (imageFile.size > 2 * 1024 * 1024) {
+          alert('La imagen no puede ser mayor a 2MB');
+          return;
+        }
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(imageFile.type)) {
+          alert('Solo se permiten imágenes JPG, PNG, GIF y WebP');
+          return;
+        }
+      }
+
+      // Submit form
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('price', price);
+      formData.append('categoryId', categoryId);
+      formData.append('description', description);
+      formData.append('showToClients', showToClients);
+      formData.append('outStock', outStock);
+
+      try {
+        // First upload the image
+        if (imageFile) {
+          const uploadResponse = await fetch('/upload-product', {
+            method: 'POST',
+            body: formData,
+          });
+          const uploadResult = await uploadResponse.json();
+          if (!uploadResult.success) {
+            alert(uploadResult.message || 'Error al subir imagen');
+            return;
+          }
+          const uploadedFile = uploadResult.file;
+          
+          // Then create the product with the uploaded image
+          const productResponse = await fetch('/admin/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name,
+              price,
+              categoryId,
+              description,
+              showToClients,
+              outStock,
+              image: uploadedFile,
+            }),
+          });
+          const productResult = await productResponse.json();
+          if (productResult.success) {
+            alert('Producto creado exitosamente');
+            document.getElementById('productForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('productImage').value = '';
+            window.location.reload();
+          } else {
+            alert('Error al crear producto: ' + productResult.message);
+          }
+        } else {
+          // Create without image
+          const response = await fetch('/admin/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name,
+              price,
+              categoryId,
+              description,
+              showToClients,
+              outStock,
+            }),
+          });
+          const result = await response.json();
+          if (result.success) {
+            alert('Producto creado exitosamente');
+            document.getElementById('productForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            window.location.reload();
+          } else {
+            alert('Error al crear producto: ' + result.message);
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al crear producto');
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

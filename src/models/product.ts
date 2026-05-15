@@ -19,10 +19,13 @@ export interface ProductCreationAttrs extends Optional<ProductAttributes, 'id' |
   name: string;
   price: number;
   description?: string;
-  image?: string;
+  image?: string | undefined;
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
+  id?: undefined;
+  createdAt?: undefined;
+  updatedAt?: undefined;
 }
 
 export class Product extends Model<ProductAttributes> {
