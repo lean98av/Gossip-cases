@@ -28,7 +28,7 @@ export default {
       next(error);
     }
   },
-
+//avanzar despues
   // async createProduct(req: Request, res: Response, next: NextFunction) {
   //   try {
   //     const { name, price, categoryId, description } = req.body;
