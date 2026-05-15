@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%- title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">Gossip Cases</a>
+    </div>
+  </nav>
+
+  <!-- Admin Panel -->
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1><%- title %></h1>
+      <a href="/admin" class="btn btn-secondary">
+        ← Volver al Inicio
+      </a>
+    </div>
+
+    <% if (orders.length === 0) { %>
+      <div class="alert alert-info">
+        No se encontraron ordenes.
+      </div>
+    <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Fecha de Creación</th>
+              <th>Productos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% orders.forEach(order => { %>
+              <tr>
+                <td><%= order.id %></td>
+                <td class="fw-bold">$<%= order.total.toFixed(2) %></td>
+                <td>
+                  <span class="badge <%= order.status === 'pending' ? 'bg-warning' : order.status === 'confirmed' ? 'bg-success' : 'bg-danger' %>">
+                    <%= order.status %>
+                  </span>
+                </td>
+                <td><%- order.createdAt %></td>
+                <td>
+                  <% order.products.forEach(productId => { %>
+                    <span class="badge bg-secondary me-1">Producto <%= productId %></span>
+                  <% }) %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-0">&copy; 2024 Gossip Cases. Panel de Administración.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

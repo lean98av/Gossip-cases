@@ -11,6 +11,7 @@ import sequelize from './config/db';
 // Setup views
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../src/views'));
+app.set('views', path.join(__dirname, '../src/views/admin'));
 
 // Attempt to authenticate, but don't fail if DB is not available
 sequelize.authenticate()
