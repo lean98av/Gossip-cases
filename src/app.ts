@@ -64,7 +64,13 @@ app.use('/api/search', searchRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Home Routes
+import homeRoutes from './routes/homeRoutes';
+app.use(homeRoutes);
+
 console.log('Routes registrados en app');
+
 // Home Route
 app.get('/', HomeController.home);
 
