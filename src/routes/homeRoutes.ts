@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import CategoriesProductsController from '../controllers/CategoriesProductsController';
+import { HomeController } from '../controllers';
 
 const router = Router();
 
 // Home route
-router.get('/', CategoriesProductsController.home);
+router.get('/', HomeController.home);
 
 // Category routes
 router.get('/gossip-cases-cargadores', CategoriesProductsController.getGossipCasesCargadores);
