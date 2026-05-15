@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Product from '../models/product';
 import Order from '../models/order';
+import Category from '../models/category';
 
 export default {
   async home(req: Request, res: Response, next: NextFunction) {
@@ -16,7 +17,7 @@ export default {
   async adminProducts(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Product.findAll({
-        include: [{ model: Product, as: 'category' }],
+        include: [{ model: Category, as: 'category' }],
       });
 
       res.render('admin/adminProducts', {
