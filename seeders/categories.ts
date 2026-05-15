@@ -3,28 +3,20 @@ import { DataTypes } from 'sequelize';
 
 const categories = [
   {
-    name: 'Electrónica',
-    description: 'Celulares, laptops, tablets y accesorios tecnológicos',
+    name: 'Catálogo exclusivo',
+    description: 'Colección especial de productos seleccionados',
   },
   {
-    name: 'Accesorios',
-    description: 'Cascos, fundas, cargadores y accesorios para dispositivos',
+    name: 'Catálogo Fundas iP.',
+    description: 'Fundas y protectores para iPad y dispositivos',
   },
   {
-    name: 'Móviles',
-    description: 'Smartphones y tabletas de las principales marcas',
+    name: 'Gossip Cases AirPods',
+    description: 'Fundas premium para AirPods y AirPods Pro',
   },
   {
-    name: 'Audio',
-    description: 'Altavoces, auriculares y sistemas de sonido',
-  },
-  {
-    name: 'Smart Home',
-    description: 'Dispositivos para automatización del hogar',
-  },
-  {
-    name: 'Gaming',
-    description: 'Consolas, accesorios y periféricos para gamers',
+    name: 'Gossip Cases cargadores',
+    description: 'Casas y fundas para cargadores y power banks',
   },
 ];
 
