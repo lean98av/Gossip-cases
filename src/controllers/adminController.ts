@@ -29,25 +29,25 @@ export default {
     }
   },
 
-  async createProduct(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { name, price, categoryId, description } = req.body;
+  // async createProduct(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     const { name, price, categoryId, description } = req.body;
 
-      const product = await Product.create({
-        name,
-        price: parseFloat(price),
-        categoryId: parseInt(categoryId),
-        description,
-        showToClients: true,
-        outStock: false,
-        image: null,
-      });
+  //     const product = await Product.create({
+  //       name,
+  //       price: parseFloat(price),
+  //       categoryId: parseInt(categoryId),
+  //       description,
+  //       showToClients: true,
+  //       outStock: false,
+  //       image: "", // Aquí puedes manejar la lógica para subir la imagen y obtener su URL
+  //     });
 
-      res.json({ success: true, data: product });
-    } catch (error) {
-      next(error);
-    }
-  },
+  //     res.json({ success: true, data: product });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // },
 
   async adminOrders(req: Request, res: Response, next: NextFunction) {
     try {
