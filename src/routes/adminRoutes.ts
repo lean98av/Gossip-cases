@@ -6,8 +6,9 @@ import { Request } from 'express';
 
 const router = Router();
 
-router.use((req: { query: { pass?: string } }, res: Response, next: NextFunction) => {
-  const pass = (req as any).query?.pass;
+// Middleware de autenticación para rutas protegidas
+const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const pass = req.query?.pass;
   const ADMIN_PASS = process.env.ADMIN_PASS || 'admin123';
 
   if (pass !== ADMIN_PASS) {
@@ -16,17 +17,18 @@ router.use((req: { query: { pass?: string } }, res: Response, next: NextFunction
   }
 
   next();
-});
+};
 
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+// Rutas del admin panel (todas protegidas por autenticación)
+router.get('/', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   await adminController.home(req, res, next);
 });
 
-router.get('/products', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/products', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   await adminController.adminProducts(req, res, next);
 });
 
-router.get('/orders', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/orders', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   await adminController.adminOrders(req, res, next);
 });
 

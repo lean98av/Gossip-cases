@@ -62,13 +62,12 @@ import adminRoutes from './routes/adminRoutes';
 app.use('/api/products', productRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/admin', adminRoutes);
 
 // Home Routes
 import homeRoutes from './routes/homeRoutes';
 app.use(homeRoutes);
 
-console.log('Routes registrados en app');
 
 // Home Route
 app.get('/', HomeController.home);

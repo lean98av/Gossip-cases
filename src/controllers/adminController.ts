@@ -5,7 +5,7 @@ import Order from '../models/order';
 export default {
   async home(req: Request, res: Response, next: NextFunction) {
     try {
-      res.render('admin/home', {
+      res.render('admin/adminHome', {
         title: 'Admin Panel - Gossip Cases',
       });
     } catch (error) {
