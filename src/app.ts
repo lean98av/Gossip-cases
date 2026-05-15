@@ -56,14 +56,12 @@ app.get('/_server', (req: Request, res: Response) => {
 import productRoutes from './routes/productRoutes';
 import searchRoutes from './routes/searchRoutes';
 import cartRoutes from './routes/cartRoutes';
-import authRoutes from './routes/authRoutes';
 import adminRoutes from './routes/adminRoutes';
 
 // Public Routes
 app.use('/api/products', productRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Home Routes
