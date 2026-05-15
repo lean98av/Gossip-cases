@@ -3,37 +3,6 @@ import Category from '../models/category';
 import Product from '../models/product';
 
 export default {
-  home(req: Request, res: Response) {
-    const categories = [
-      { id: 1, name: 'Gossip Cases cargadores', description: 'Casas y fundas para cargadores y power banks' },
-      { id: 2, name: 'Gossip Cases AirPods', description: 'Fundas premium para AirPods y AirPods Pro' },
-      { id: 3, name: 'Catálogo Fundas iP.', description: 'Fundas y protectores para iPad y dispositivos' },
-      { id: 4, name: 'catálogo exclusivo', description: 'Colección especial de productos seleccionados' },
-    ];
-
-    res.render('home', {
-      home: {
-        welcomeMessage: '¡Hola! Bienvenido a Gossip Cases',
-        featuredProducts: [
-          { id: 1, name: 'AirPods Pro', price: 249.00, image: 'airpods.png' },
-          { id: 2, name: 'AirPods Max', price: 399.00, image: 'airpods.png' },
-          { id: 3, name: 'AirPods 2', price: 99.00, image: 'airpods.png' },
-        ],
-        categories,
-        stats: {
-          totalProducts: 1000,
-          totalOrders: 5000,
-          totalCustomers: 2500,
-        },
-        features: [
-          { title: 'Rápido', description: 'Optimizado para el mejor rendimiento' },
-          { title: 'Seguro', description: 'Protección de datos de primer nivel' },
-          { title: 'Moderno', description: 'Diseño limpio y atractivo' },
-        ],
-      },
-    });
-  },
-
   async getGossipCasesCargadores(req: Request, res: Response) {
     try {
       const category = await Category.findByPk(1);
