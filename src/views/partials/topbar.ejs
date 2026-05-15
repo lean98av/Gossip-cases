@@ -1,0 +1,88 @@
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container-fluid px-3">
+
+        <a class="navbar-brand d-flex align-items-center" href="/index.html">
+            <span class="navbar-logo-container me-2">
+                <img src="/images/logo.png" alt="Gossip Cases" class="navbar-logo" />
+            </span>
+        </a>
+        <!-- Hamburger toggles collapse that will contain stacked category cards on mobile -->
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-close" aria-hidden="true">✕</span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown d-none d-lg-block">
+                    <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
+                        data-bs-toggle="dropdown">
+                        Categorías
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                        <li><a class="dropdown-item" href="/Cargadores.html">Cargadores</a></li>
+                        <li><a class="dropdown-item" href="/Airpods.html">AirPods</a></li>
+                        <li><a class="dropdown-item" href="/Fundas.html">Fundas</a></li>
+                        <li><a class="dropdown-item" href="/Gossip-exclusive.html">Gossip Exclusive Cases</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Stacked rectangular category cards (visible when collapse is open on mobile) -->
+            <div class="category-grid d-lg-none w-100 mt-3">
+                <a href="/Cargadores.html" class="category-nav-card">
+                    <img src="/images/cargadores.png" alt="Cargadores">
+                    <div class="category-nav-overlay"><h6>Cargadores</h6></div>
+                </a>
+                <a href="/Airpods.html" class="category-nav-card">
+                    <img src="/images/airpods.png" alt="AirPods">
+                    <div class="category-nav-overlay"><h6>AirPods</h6></div>
+                </a>
+                <a href="/Fundas.html" class="category-nav-card">
+                    <img src="/images/fundas.png" alt="Fundas">
+                    <div class="category-nav-overlay"><h6>Fundas</h6></div>
+                </a>
+                <a href="/Gossip-exclusive.html" class="category-nav-card">
+                    <img src="/images/gossip-exclusive.png" alt="Gossip Exclusive">
+                    <div class="category-nav-overlay"><h6>Gossip Exclusive</h6></div>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Offcanvas panel containing category grid for mobile -->
+<div class="offcanvas offcanvas-top offcanvas-category" tabindex="-1" id="categoryOffcanvas" aria-labelledby="categoryOffcanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="categoryOffcanvasLabel">Categorías</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body py-3">
+        <div class="category-grid">
+            <!-- CARGADORES -->
+            <a href="/Cargadores.html" class="category-nav-card">
+                    <img src="/images/cargadores.png" alt="Cargadores">
+                    <div class="category-nav-overlay"><h6>Cargadores</h6></div>
+            </a>
+
+            <!-- AIRPODS -->
+            <a href="/Airpods.html" class="category-nav-card">
+                    <img src="/images/airpods.png" alt="AirPods">
+                    <div class="category-nav-overlay"><h6>AirPods</h6></div>
+            </a>
+
+            <!-- FUNDAS -->
+            <a href="/Fundas.html" class="category-nav-card">
+                    <img src="/images/fundas.png" alt="Fundas">
+                    <div class="category-nav-overlay"><h6>Fundas</h6></div>
+            </a>
+
+            <!-- GOSSIP -->
+            <a href="/Gossip-exclusive.html" class="category-nav-card">
+                    <img src="/images/gossip-exclusive.png" alt="Gossip Exclusive">
+                    <div class="category-nav-overlay"><h6>Gossip Exclusive</h6></div>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,139 @@
+/* ===================================
+   HERO BANNER
+   =================================== */
+.hero-banner {
+    background: linear-gradient(180deg, var(--hero-bg-start), var(--hero-bg-end));
+    color: var(--hero-button-text);
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+}
+
+.hero-banner h1 {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 1rem;
+    color: #6d3f2f;
+    font-weight: 700;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.hero-cta {
+    display: inline-block;
+    background-color: var(--hero-button-bg);
+    color: var(--hero-button-text);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    border-radius: 50px;
+    margin-top: 1.5rem;
+}
+
+/* ===================================
+   CATEGORY CARDS
+   =================================== */
+.category-card {
+    position: relative;
+    display: block;
+    height: 250px;
+    border-radius: 24px;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.category-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-overlay h2 {
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.category-card:hover img {
+    transform: scale(1.05);
+}
+
+/* ===================================
+   MAIN CONTENT
+   =================================== */
+main.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+@media (max-width: 768px) {
+    .hero-banner {
+        padding: 2rem 0;
+    }
+
+    .hero-banner h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .category-card {
+        height: 200px;
+    }
+
+    .category-overlay h2 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-banner {
+        padding: 1.5rem 0;
+    }
+
+    .hero-banner h1 {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .category-card {
+        height: 160px;
+    }
+
+    .category-overlay h2 {
+        font-size: 1.1rem;
+    }
+}
