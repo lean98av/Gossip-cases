@@ -5,10 +5,10 @@ import Product from '../models/product';
 export default {
   home(req: Request, res: Response) {
     const categories = [
-      { id: 1, name: 'Catálogo exclusivo', description: 'Colección especial de productos seleccionados' },
-      { id: 2, name: 'Catálogo Fundas iP.', description: 'Fundas y protectores para iPad y dispositivos' },
-      { id: 3, name: 'Gossip Cases AirPods', description: 'Fundas premium para AirPods y AirPods Pro' },
-      { id: 4, name: 'Gossip Cases cargadores', description: 'Casas y fundas para cargadores y power banks' },
+      { id: 1, name: 'Gossip Cases cargadores', description: 'Casas y fundas para cargadores y power banks' },
+      { id: 2, name: 'Gossip Cases AirPods', description: 'Fundas premium para AirPods y AirPods Pro' },
+      { id: 3, name: 'Catálogo Fundas iP.', description: 'Fundas y protectores para iPad y dispositivos' },
+      { id: 4, name: 'catálogo exclusivo', description: 'Colección especial de productos seleccionados' },
     ];
 
     res.render('home', {
@@ -34,7 +34,7 @@ export default {
     });
   },
 
-  async getCatalogoExclusivo(req: Request, res: Response) {
+  async getGossipCasesCargadores(req: Request, res: Response) {
     try {
       const category = await Category.findByPk(1);
       if (!category) {
@@ -48,17 +48,17 @@ export default {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('category', {
+      res.render('categorySimple', {
         category: { ...category, products },
-        title: 'Catálogo exclusivo',
+        title: 'Gossip Cases cargadores',
       });
     } catch (error) {
-      console.error('Error en getCatalogoExclusivo:', error);
+      console.error('Error en getGossipCasesCargadores:', error);
       res.status(500).json({ success: false, error: 'Error al obtener productos' });
     }
   },
 
-  async getCatalogoFundasIP(req: Request, res: Response) {
+  async getGossipCasesAirPods(req: Request, res: Response) {
     try {
       const category = await Category.findByPk(2);
       if (!category) {
@@ -72,17 +72,17 @@ export default {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('category', {
+      res.render('categorySimple', {
         category: { ...category, products },
-        title: 'Catálogo Fundas iP.',
+        title: 'Gossip Cases AirPods',
       });
     } catch (error) {
-      console.error('Error en getCatalogoFundasIP:', error);
+      console.error('Error en getGossipCasesAirPods:', error);
       res.status(500).json({ success: false, error: 'Error al obtener productos' });
     }
   },
 
-  async getGossipCasesAirPods(req: Request, res: Response) {
+  async getCatalogoFundasIP(req: Request, res: Response) {
     try {
       const category = await Category.findByPk(3);
       if (!category) {
@@ -96,17 +96,17 @@ export default {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('category', {
+      res.render('categorySimple', {
         category: { ...category, products },
-        title: 'Gossip Cases AirPods',
+        title: 'Catálogo Fundas iP.',
       });
     } catch (error) {
-      console.error('Error en getGossipCasesAirPods:', error);
+      console.error('Error en getCatalogoFundasIP:', error);
       res.status(500).json({ success: false, error: 'Error al obtener productos' });
     }
   },
 
-  async getGossipCasesCargadores(req: Request, res: Response) {
+  async getCatalogoExclusivo(req: Request, res: Response) {
     try {
       const category = await Category.findByPk(4);
       if (!category) {
@@ -120,12 +120,12 @@ export default {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('category', {
+      res.render('categorySimple', {
         category: { ...category, products },
-        title: 'Gossip Cases cargadores',
+        title: 'catálogo exclusivo',
       });
     } catch (error) {
-      console.error('Error en getGossipCasesCargadores:', error);
+      console.error('Error en getCatalogoExclusivo:', error);
       res.status(500).json({ success: false, error: 'Error al obtener productos' });
     }
   },
@@ -141,14 +141,14 @@ export default {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('category', {
+      res.render('categorySimple', {
         category: {
           id: 5,
-          name: 'Stock disponible',
+          name: 'stock disponible',
           description: 'Productos con stock disponible para envío inmediato',
           products,
         },
-        title: 'Stock disponible',
+        title: 'stock disponible',
       });
     } catch (error) {
       console.error('Error en getStockDiponible:', error);

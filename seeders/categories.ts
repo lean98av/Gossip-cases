@@ -1,31 +1,30 @@
-import { DataTypes } from 'sequelize';
-
+import { QueryInterface } from 'sequelize';
 
 const categories = [
   {
-    name: 'Catálogo exclusivo',
-    description: 'Colección especial de productos seleccionados',
-  },
-  {
-    name: 'Catálogo Fundas iP.',
-    description: 'Fundas y protectores para iPad y dispositivos',
+    name: 'Gossip Cases cargadores',
+    description: 'Casas y fundas para cargadores y power banks',
   },
   {
     name: 'Gossip Cases AirPods',
     description: 'Fundas premium para AirPods y AirPods Pro',
   },
   {
-    name: 'Gossip Cases cargadores',
-    description: 'Casas y fundas para cargadores y power banks',
+    name: 'Catálogo Fundas iP.',
+    description: 'Fundas y protectores para iPad y dispositivos',
   },
   {
-    name: 'Stock diponible',
+    name: 'catálogo exclusivo',
+    description: 'Colección especial de productos seleccionados',
+  },
+  {
+    name: 'stock disponible',
     description: 'Productos con stock disponible para envío inmediato',
   },
 ];
 
 export default {
-  up: async (queryInterface: any) => {
+  async up(queryInterface: QueryInterface): Promise<void> {
     await queryInterface.bulkInsert(
       'categories',
       categories.map((category) => ({
@@ -37,7 +36,7 @@ export default {
     );
   },
 
-  down: async (queryInterface: any) => {
-    await queryInterface.bulkDelete('categories', null, {});
+  async down(queryInterface: QueryInterface): Promise<void> {
+    await queryInterface.bulkDelete('categories', {}, {});
   },
 };
