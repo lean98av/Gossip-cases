@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Product from '../models/product';
+import ProductImage from '../models/productImage';
 import Order from '../models/order';
 import Category from '../models/category';
 import multer from 'multer';
@@ -9,7 +10,7 @@ export default {
   upload: multer({
     storage: multer.diskStorage({
       destination: (req: any, file: any, cb: any) => cb(null, path.join(__dirname, '../../uploads/')),
-      filename: (req: any, file: any, cb: any) => cb(null, Date.now() + '-' + file.originalname),
+      filename: (req: any, file: any, cb: any) => cb(null, Date.now() + '-' + file.originalname, file),
     }),
     limits: { fileSize: 2 * 1024 * 1024 },
     fileFilter: (req: any, file: any, cb: any) => {
@@ -58,10 +59,29 @@ async createProduct(req: Request, res: Response, next: NextFunction) {
         description,
         showToClients: showToClients === 'true',
         outStock: outStock === 'true',
-        image: req.file ? req.file.filename : undefined,
       } as any;
 
-      const product = await Product.create(productData);
+      // Create image record first so we can get the ID
+      if (req.file) {
+        const image = await ProductImage.create({
+          name: req.file.originalname,
+          file: req.file.buffer.toString('base64'),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+
+        // Get the image ID for the reference
+        const { id: imageId } = image;
+
+        // Create product with reference to image
+        const product = await Product.create({
+          ...productData,
+          imageId: imageId,
+        });
+      } else {
+        const product = await Product.create(productData);
+      }
+
       res.json({ success: true, data: product });
     } catch (error) {
       next(error);

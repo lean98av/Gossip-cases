@@ -48,10 +48,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      image: {
-        type: Sequelize.STRING(255),
-        allowNull: true,
-      },
       categoryId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -145,9 +141,49 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
+
+    await queryInterface.createTable('product_images', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      productId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'products',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      },
+      name: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      file: {
+        type: Sequelize.STRING(2097152),
+        allowNull: false,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
+      },
+    });
+
+    await queryInterface.addIndex('product_images', ['productId']);
   },
 
   async down (queryInterface, Sequelize) {
+    await queryInterface.dropTable('product_images');
     await queryInterface.dropTable('orders');
     await queryInterface.dropTable('product_categories');
     await queryInterface.dropTable('products');

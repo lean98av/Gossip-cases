@@ -1,13 +1,14 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/db';
 import Category from './category';
+import ProductImage from './productImage';
 
 export interface ProductAttributes {
   id: number;
   name: string;
   price: number;
   description?: string;
-  image?: string;
+  imageId?: number;
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
@@ -19,7 +20,7 @@ export interface ProductCreationAttrs extends Optional<ProductAttributes, 'id' |
   name: string;
   price: number;
   description?: string;
-  image?: string | undefined;
+  imageId?: number;
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
@@ -33,7 +34,6 @@ export class Product extends Model<ProductAttributes> {
   public name!: string;
   public price!: number;
   public description?: string;
-  public image?: string;
   public categoryId!: number;
   public showToClients!: boolean;
   public outStock!: boolean;
@@ -74,12 +74,15 @@ Product.init(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    image: {
-      type: DataTypes.STRING(255),
+    imageId: {
+      type: DataTypes.INTEGER,
       allowNull: true,
-      validate: {
-        len: [0, 2097152], // Base64 string max length for 2MB
+      references: {
+        model: 'product_images',
+        key: 'id',
       },
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     },
     categoryId: {
       type: DataTypes.INTEGER,
@@ -128,6 +131,16 @@ Product.init(
 Product.belongsTo(Category, {
   foreignKey: 'categoryId',
   as: 'category',
+});
+
+Product.hasMany(ProductImage, {
+  foreignKey: 'productId',
+  as: 'images',
+});
+
+ProductImage.belongsTo(Product, {
+  foreignKey: 'productId',
+  as: 'product',
 });
 
 Category.hasMany(Product, {
