@@ -9,8 +9,8 @@ const app = express();
 import sequelize from './config/db';
 
 // Setup views
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, '../views'));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../src/views'));
 
 // Attempt to authenticate, but don't fail if DB is not available
 sequelize.authenticate()
@@ -28,7 +28,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
-console.log('paso los middlewares');
 // CORS
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.header('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || '*');
@@ -39,12 +38,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   }
   next();
 });
-console.log('paso los cors');
 // Health check
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
-console.log('paso los el api health');
 // Server info
 app.get('/_server', (req: Request, res: Response) => {
   res.json({
@@ -53,17 +50,13 @@ app.get('/_server', (req: Request, res: Response) => {
     timestamp: new Date().toISOString()
   });
 });
-console.log('paso los el api server info');
 
 // API Routes
-console.log('Importando routes');
 import productRoutes from './routes/productRoutes';
 import searchRoutes from './routes/searchRoutes';
 import cartRoutes from './routes/cartRoutes';
 import authRoutes from './routes/authRoutes';
 import adminRoutes from './routes/adminRoutes';
-
-console.log('Routes importados');
 
 // Public Routes
 app.use('/api/products', productRoutes);
@@ -74,6 +67,5 @@ app.use('/api/admin', adminRoutes);
 console.log('Routes registrados en app');
 // Home Route
 app.get('/', HomeController.home);
-console.log('Home route registrado');
 
 export default app;
