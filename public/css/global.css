@@ -411,3 +411,106 @@ body {
     /* hide stacked cards on large screens (desktop uses dropdown) */
     .category-grid { display: none !important; }
 }
+
+/* ===================================
+   PRODUCT CARDS
+=================================== */
+
+.product-card {
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+
+    height: 100%;
+
+    border: 1px solid #e8dce5 !important;
+
+    border-radius: 22px !important;
+
+    overflow: hidden;
+
+    background: white;
+
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.product-img {
+    width: 100%;
+
+    height: 200px;
+
+    object-fit: cover;
+
+    background: #fff;
+}
+
+.product-card .card-body {
+    padding: 1rem 1rem 1.2rem 1rem;
+}
+
+.product-price {
+    font-size: 1.25rem;
+
+    font-weight: 700;
+
+    color: #c5a9d6;
+
+    margin-bottom: .35rem;
+}
+
+.product-title {
+    font-size: .95rem;
+
+    line-height: 1.4;
+
+    color: #5c3c2e;
+
+    margin-bottom: 0;
+
+    min-height: 45px;
+}
+
+/* ===================================
+   FILTERS
+=================================== */
+
+.filters-section {
+    background: white;
+
+    padding: 1.2rem;
+
+    border-radius: 20px;
+
+    margin-bottom: 2rem;
+
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+}
+
+.filters-section .form-select {
+    border-radius: 12px;
+
+    border: 1px solid #e0d4e6;
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media (max-width: 768px) {
+
+    .product-img {
+        height: 200px;
+    }
+
+    .product-title {
+        font-size: .9rem;
+    }
+
+}
+
