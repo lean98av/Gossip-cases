@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Product, { ProductAttributes } from '../models/product';
 import sequelize from '../config/db';
+import { Category } from '../models';
 
 export default {
   async getAllProducts(req: Request, res: Response, next: NextFunction) {
@@ -42,4 +43,33 @@ export default {
       next(error);
     }
   },
+
+  async getProductDetailPage(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const product = await Product.findByPk(req.params.id, {
+        include: [
+          {
+            model: Category,
+            as: 'category'
+          }
+        ]
+      });
+
+      if (!product) {
+        return res.status(404).render('404');
+      }
+
+      res.render('details', {
+        product,
+        title: product.name
+      });
+
+    } catch (error) {
+
+      next(error);
+
+    }
+  }
 };

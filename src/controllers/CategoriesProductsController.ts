@@ -3,7 +3,7 @@ import Category from '../models/category';
 import Product from '../models/product';
 
 export default {
-  async getGossipCasesCargadores(req: Request, res: Response) {
+  async getCargadores(req: Request, res: Response) {
     try {
       const category = await Category.findByPk(1);
       if (!category) {
@@ -17,17 +17,21 @@ export default {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('categorySimple', {
-        category: { ...category, products },
+      res.render('cargadores', {
+        category,
+        products,
         title: 'Gossip Cases cargadores',
       });
-    } catch (error) {
-      console.error('Error en getGossipCasesCargadores:', error);
-      res.status(500).json({ success: false, error: 'Error al obtener productos' });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        stack: error.stack
+      });
     }
   },
 
-  async getGossipCasesAirPods(req: Request, res: Response) {
+  async getAirPods(req: Request, res: Response) {
     try {
       const category = await Category.findByPk(2);
       if (!category) {
@@ -41,9 +45,10 @@ export default {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('categorySimple', {
-        category: { ...category, products },
-        title: 'Gossip Cases AirPods',
+       res.render('airpods', {
+        category,
+        products,
+        title: 'Gossip Cases Airpods',
       });
     } catch (error) {
       console.error('Error en getGossipCasesAirPods:', error);
@@ -51,7 +56,7 @@ export default {
     }
   },
 
-  async getCatalogoFundasIP(req: Request, res: Response) {
+  async getFundas(req: Request, res: Response) {
     try {
       const category = await Category.findByPk(3);
       if (!category) {
@@ -65,9 +70,10 @@ export default {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('categorySimple', {
-        category: { ...category, products },
-        title: 'Catálogo Fundas iP.',
+       res.render('fundas', {
+        category,
+        products,
+        title: 'Gossip Cases fundas',
       });
     } catch (error) {
       console.error('Error en getCatalogoFundasIP:', error);
@@ -89,9 +95,10 @@ export default {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('categorySimple', {
-        category: { ...category, products },
-        title: 'catálogo exclusivo',
+       res.render('gossip-exclusive', {
+        category,
+        products,
+        title: 'Gossip Cases exclusive',
       });
     } catch (error) {
       console.error('Error en getCatalogoExclusivo:', error);

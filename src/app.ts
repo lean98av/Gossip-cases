@@ -66,8 +66,9 @@ app.use('/api/search', searchRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/admin', adminRoutes);
 
-// Home Routes
+// View Routes
 import homeRoutes from './routes/homeRoutes';
+app.use('/product', productRoutes);
 app.use(homeRoutes);
 
 
