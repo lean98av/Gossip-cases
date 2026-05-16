@@ -21,6 +21,8 @@ export default {
     },
   }),
 
+  // Métodos que retornan vistas
+
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('que pasa con el auth:', req.body);
@@ -84,6 +86,53 @@ export default {
       next(error);
     }
   },
+
+  async getEditProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const product = await Product.findByPk(id, {
+        include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
+      });
+
+      if (!product) {
+        res.status(404).json({ success: false, message: 'Producto no encontrado' });
+        return;
+      }
+
+      const categories = await Category.findAll();
+
+      res.render('admin/createEditProduct', {
+        title: 'Edit Product',
+        product,
+        categories,
+        adminAuth: req.adminAuth,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async adminOrders(req: Request, res: Response, next: NextFunction) {
+    try {
+      const orders = await Order.findAll({
+        include: [{ model: Product, as: 'products' }],
+        order: [['createdAt', 'DESC']],
+      });
+
+      res.render('admin/adminOrders', {
+        title: 'Admin - Ordenes',
+        orders,
+        adminAuth: req.adminAuth,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Métodos que retornan JSON
 
   async createProduct(req: Request, res: Response, next: NextFunction) {
     try {
@@ -167,34 +216,6 @@ export default {
     }
   },
 
-  async getEditProduct(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id } = req.params;
-      const product = await Product.findByPk(id, {
-        include: [
-          { model: Category, as: 'category' },
-          { model: ProductImage, as: 'images' },
-        ],
-      });
-
-      if (!product) {
-        res.status(404).json({ success: false, message: 'Producto no encontrado' });
-        return;
-      }
-
-      const categories = await Category.findAll();
-
-      res.render('admin/createEditProduct', {
-        title: 'Edit Product',
-        product,
-        categories,
-        adminAuth: req.adminAuth,
-      });
-    } catch (error) {
-      next(error);
-    }
-  },
-
   async getProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
@@ -235,23 +256,6 @@ export default {
       await product.destroy();
 
       res.json({ success: true, message: 'Producto eliminado correctamente' });
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  async adminOrders(req: Request, res: Response, next: NextFunction) {
-    try {
-      const orders = await Order.findAll({
-        include: [{ model: Product, as: 'products' }],
-        order: [['createdAt', 'DESC']],
-      });
-
-      res.render('admin/adminOrders', {
-        title: 'Admin - Ordenes',
-        orders,
-        adminAuth: req.adminAuth,
-      });
     } catch (error) {
       next(error);
     }
