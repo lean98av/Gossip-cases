@@ -23,12 +23,6 @@
       </a>
     </div>
 
-    <% if (error) { %>
-      <div class="alert alert-danger">
-        <strong>Error:</strong> <%= error %>
-      </div>
-    <% } %>
-
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card shadow">
@@ -93,11 +87,27 @@
                 </label>
               </div>
 
+              <div class="mb-3">
+                <label class="form-label">Imágenes adicionales (opcional)</label>
+                <input type="file" class="form-control" id="productImages" accept="image/*" multiple>
+                <div class="form-text">
+                  Sube múltiples imágenes adicionales. Máximo 2MB por imagen.
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Imágenes a borrar (opcional)</label>
+                <input type="text" class="form-control" id="deleteImages" placeholder="IDs separados por coma">
+                <div class="form-text">
+                  Ingresa los IDs de las imágenes a eliminar, separados por coma.
+                </div>
+              </div>
+
               <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">
                   <%= title.includes('Create') ? 'Crear Producto' : 'Actualizar Producto' %>
                 </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">
                   Cancelar
                 </button>
               </div>
@@ -119,9 +129,9 @@
     // Populate category dropdown
     const categorySelect = document.getElementById('productCategoryId');
     const categories = [
-      <% products.forEach(p => { if (p.category) { %>
-        { value: "<%= p.category.id %>", text: "<%= p.category.name %>" },
-      <% }) %><% if (products.length === 0) { %>
+      <% categories.forEach(c => { %>
+        { value: "<%= c.id %>", text: "<%= c.name %>" },
+      <% }) %><% if (categories.length === 0) { %>
         { value: "1", text: "Gossip Cases cargadores" },
         { value: "2", text: "Gossip Cases AirPods" },
         { value: "3", text: "Catálogo Fundas iP." },
@@ -132,6 +142,24 @@
     categories.forEach(cat => {
       categorySelect.innerHTML += `<option value="${cat.value}">${cat.text}</option>`;
     });
+
+    // Populate form with existing product data (for edit mode)
+    <% if (product) { %>
+      document.getElementById('productName').value = "<%= product.name %>";
+      document.getElementById('productPrice').value = "<%= product.price %>";
+      document.getElementById('productCategoryId').value = "<%= product.categoryId %>";
+      document.getElementById('productDescription').value = "<%= product.description || '' %>";
+      document.getElementById('showToClients').checked = "<%= product.showToClients %>";
+      document.getElementById('outStock').checked = "<%= product.outStock %>";
+      <% if (product.images && product.images.length > 0) { %>
+        // Pre-select first image
+        document.getElementById('productImage').value = "";
+        <% if (product.images[0].file) { %>
+          document.getElementById('imagePreviewImg').src = "<%= product.images[0].file %>";
+          document.getElementById('imagePreview').style.display = 'block';
+        <% } %>
+      <% } %>
+    <% } %>
 
     // Image preview
     document.getElementById('productImage').addEventListener('change', function(e) {
@@ -148,11 +176,22 @@
       }
     });
 
+    function resetForm() {
+      document.getElementById('productForm').reset();
+      document.getElementById('imagePreview').style.display = 'none';
+      document.getElementById('productImage').value = '';
+      document.getElementById('productName').classList.remove('is-invalid');
+      document.getElementById('productPrice').classList.remove('is-invalid');
+      document.getElementById('productCategoryId').classList.remove('is-invalid');
+      document.getElementById('productDescription').classList.remove('is-invalid');
+    }
+
     // Form validation
     const form = document.getElementById('productForm');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+      resetForm();
+
       // Validate required fields
       const name = document.getElementById('productName').value.trim();
       const price = document.getElementById('productPrice').value;
@@ -166,32 +205,24 @@
       if (!name) {
         document.getElementById('productName').classList.add('is-invalid');
         return;
-      } else {
-        document.getElementById('productName').classList.remove('is-invalid');
       }
 
       // Validate price
       if (!price || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
         document.getElementById('productPrice').classList.add('is-invalid');
         return;
-      } else {
-        document.getElementById('productPrice').classList.remove('is-invalid');
       }
 
       // Validate category
       if (!categoryId) {
         document.getElementById('productCategoryId').classList.add('is-invalid');
         return;
-      } else {
-        document.getElementById('productCategoryId').classList.remove('is-invalid');
       }
 
       // Validate description
       if (!description) {
         document.getElementById('productDescription').classList.add('is-invalid');
         return;
-      } else {
-        document.getElementById('productDescription').classList.remove('is-invalid');
       }
 
       // Image validation
@@ -217,70 +248,53 @@
       formData.append('outStock', outStock);
 
       try {
-        // First upload the image
-        if (imageFile) {
+        // Upload additional images
+        const additionalFormData = new FormData();
+        const additionalFiles = document.getElementById('productImages').files;
+        if (additionalFiles) {
+          for (const file of additionalFiles) {
+            additionalFormData.append('images', file);
+          }
           const uploadResponse = await fetch('/upload-product', {
             method: 'POST',
-            body: formData,
+            body: additionalFormData,
           });
           const uploadResult = await uploadResponse.json();
           if (!uploadResult.success) {
-            alert(uploadResult.message || 'Error al subir imagen');
+            alert(uploadResult.message || 'Error al subir imágenes');
             return;
           }
-          const uploadedFile = uploadResult.file;
-          
-          // Then create the product with the uploaded image
-          const productResponse = await fetch('/admin/products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              name,
-              price,
-              categoryId,
-              description,
-              showToClients,
-              outStock,
-              image: uploadedFile,
-            }),
-          });
-          const productResult = await productResponse.json();
-          if (productResult.success) {
-            alert('Producto creado exitosamente');
-            document.getElementById('productForm').reset();
-            document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('productImage').value = '';
-            window.location.reload();
-          } else {
-            alert('Error al crear producto: ' + productResult.message);
-          }
-        } else {
-          // Create without image
-          const response = await fetch('/admin/products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              name,
-              price,
-              categoryId,
-              description,
-              showToClients,
-              outStock,
-            }),
-          });
-          const result = await response.json();
-          if (result.success) {
-            alert('Producto creado exitosamente');
-            document.getElementById('productForm').reset();
-            document.getElementById('imagePreview').style.display = 'none';
-            window.location.reload();
-          } else {
-            alert('Error al crear producto: ' + result.message);
-          }
         }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Error al crear producto');
+
+        // Delete images if specified
+        let deleteIds = [];
+        if (deleteImages && deleteImages.trim()) {
+          deleteIds = deleteImages.split(',').map(id => parseInt(id.trim()));
+        }
+
+        // Submit form
+        const response = await fetch('/admin/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            price,
+            categoryId,
+            description,
+            showToClients,
+            outStock,
+            deleteImages: deleteIds,
+          }),
+        });
+        const result = await response.json();
+        if (result.success) {
+          alert('Producto ' + (title.includes('Create') ? 'creado' : 'actualizado') + ' exitosamente');
+          window.location.reload();
+        } else {
+          alert('Error al ' + (title.includes('Create') ? 'crear' : 'actualizar') + ' producto: ' + result.message);
+        }
+      } catch (err) {
+        console.error('Error:', );
       }
     });
   </script>

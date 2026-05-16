@@ -133,6 +133,33 @@ export default {
     }
   },
 
+  async getEditProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const product = await Product.findByPk(id, {
+        include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
+      });
+
+      if (!product) {
+        res.status(404).json({ success: false, message: 'Producto no encontrado' });
+        return;
+      }
+
+      const categories = await Category.findAll();
+
+      res.render('admin/createEditProduct', {
+        title: 'Edit Product',
+        product,
+        categories,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async getProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
