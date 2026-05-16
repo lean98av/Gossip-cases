@@ -39,9 +39,12 @@ export default {
         ],
       });
 
+      const categories = await Category.findAll();
+
       res.render('admin/adminProducts', {
         title: 'Admin - Productos',
         products,
+        categories,
       });
     } catch (error) {
       next(error);
