@@ -21,19 +21,47 @@
         <div class="text-center">
           <h1 class="mb-4">👋 Bienvenido al Panel de Administración</h1>
           <p class="lead mb-5">Selecciona una opción para comenzar</p>
-          
-          <div class="d-grid gap-4 d-md-block">
-            <a href="/admin/products?pass=admin123" class="btn btn-primary btn-lg">
-              📦 Ver Productos
-            </a>
-            <a href="/admin/orders?pass=admin123" class="btn btn-success btn-lg">
-              🛒 Ver Ordenes
-            </a>
-          </div>
+
+          <% if (adminAuth) { %>
+            <div class="d-grid gap-4 d-md-block">
+              <a href="/admin/products" class="btn btn-primary btn-lg">
+                📦 Ver Productos
+              </a>
+              <a href="/admin/orders" class="btn btn-success btn-lg">
+                🛒 Ver Ordenes
+              </a>
+            </div>
+          <% } else { %>
+            <form action="/admin/login" method="POST" class="card p-4 shadow">
+              <h3 class="mb-4">🔐 Iniciar Sesión</h3>
+              <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-danger"><%= error %></div>
+              <% } %>
+              <div class="mb-3">
+                <label for="adminPass" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="adminPass" name="pass" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">
+                Iniciar Sesión
+              </button>
+            </form>
+          <% } %>
         </div>
       </div>
     </div>
   </div>
+
+  <% if (adminAuth) { %>
+    <div class="container mt-5 mb-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <a href="/admin/logout" class="btn btn-danger">
+            🚪 Cerrar Sesión
+          </a>
+        </div>
+      </div>
+    </div>
+  <% } %>
 
   <!-- Footer -->
   <footer class="bg-dark text-white py-4 mt-5">

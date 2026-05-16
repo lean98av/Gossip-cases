@@ -5,6 +5,7 @@ import Order from '../models/order';
 import Category from '../models/category';
 import multer from 'multer';
 import path from 'path';
+import { setAdminAuthCookie, clearAdminAuthCookie } from '../middleware/authMiddleware';
 
 export default {
   upload: multer({
@@ -20,10 +21,42 @@ export default {
     },
   }),
 
+  async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      console.log('que pasa con el auth:', req.body);
+      const { pass } = req.body;
+      const ADMIN_PASS = process.env.ADMIN_PASS || 'admin123';
+
+      if (pass === ADMIN_PASS) {
+        setAdminAuthCookie(req, res, ADMIN_PASS);
+        return res.redirect('/admin');
+      }
+
+      res.status(401).render('admin/adminHome', {
+        title: 'Admin Panel - Gossip Cases',
+        adminAuth: false,
+        error: 'Contraseña incorrecta',
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async logout(req: Request, res: Response, next: NextFunction) {
+    try {
+      clearAdminAuthCookie(req, res);
+      return res.redirect('/admin/login');
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async home(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log("Admin auth status in home controller:", req.adminAuth);
       res.render('admin/adminHome', {
         title: 'Admin Panel - Gossip Cases',
+        adminAuth: req.adminAuth,
       });
     } catch (error) {
       next(error);
@@ -45,6 +78,7 @@ export default {
         title: 'Admin - Productos',
         products,
         categories,
+        adminAuth: req.adminAuth,
       });
     } catch (error) {
       next(error);
@@ -67,8 +101,8 @@ export default {
       const product = await Product.create(productData);
 
       // Create image records if files were uploaded
-      if (req.files && (req.files as Express.Multer.File[]).length > 0) {
-        const files = req.files as Express.Multer.File[];
+      if (req.files && (req.files as any).length > 0) {
+        const files = req.files as any;
         for (const file of files) {
           await ProductImage.create({
             productId: product.id,
@@ -116,8 +150,8 @@ export default {
       }
 
       // Add new images if uploaded
-      if (req.files && (req.files as Express.Multer.File[]).length > 0) {
-        const files = req.files as Express.Multer.File[];
+      if (req.files && (req.files as any).length > 0) {
+        const files = req.files as any;
         for (const file of files) {
           await ProductImage.create({
             productId: product.id,
@@ -154,6 +188,7 @@ export default {
         title: 'Edit Product',
         product,
         categories,
+        adminAuth: req.adminAuth,
       });
     } catch (error) {
       next(error);
@@ -215,6 +250,7 @@ export default {
       res.render('admin/adminOrders', {
         title: 'Admin - Ordenes',
         orders,
+        adminAuth: req.adminAuth,
       });
     } catch (error) {
       next(error);
