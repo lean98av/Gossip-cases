@@ -27,7 +27,7 @@ export interface ProductCreationAttrs extends Optional<ProductAttributes, 'id' |
   updatedAt?: undefined;
 }
 
-export class Product extends Model<ProductAttributes, ProductCreationAttrs> {
+class Product extends Model<ProductAttributes, ProductCreationAttrs> {
   public id!: number;
   public name!: string;
   public price!: number;
@@ -121,6 +121,11 @@ Product.belongsTo(Category, {
   as: 'category',
 });
 
+Category.hasMany(Product, {
+  foreignKey: 'categoryId',
+  as: 'products',
+});
+
 Product.hasMany(ProductImage, {
   foreignKey: 'productId',
   as: 'images',
@@ -129,11 +134,6 @@ Product.hasMany(ProductImage, {
 ProductImage.belongsTo(Product, {
   foreignKey: 'productId',
   as: 'product',
-});
-
-Category.hasMany(Product, {
-  foreignKey: 'categoryId',
-  as: 'products',
 });
 
 export default Product;

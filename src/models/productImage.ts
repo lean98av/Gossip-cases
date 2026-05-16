@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/db';
-import Product from './product';
+import type Product from './product';
 
 export interface ProductImageAttributes {
   id: number;
@@ -13,22 +13,13 @@ export interface ProductImageAttributes {
 
 export interface ProductImageCreationAttrs extends Optional<ProductImageAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-export class ProductImage extends Model<ProductImageAttributes, ProductImageCreationAttrs> {
+class ProductImage extends Model<ProductImageAttributes, ProductImageCreationAttrs> {
   public id!: number;
   public productId!: number;
   public name!: string;
   public file!: string;
   public createdAt!: Date;
   public updatedAt!: Date;
-
-  public get product(): Product | null {
-    const val = this.getDataValue('productId');
-    return val ? (Product as any).findByPk(val, { raw: true }) : null;
-  }
-
-  public set product(value: Product | null) {
-    this.setDataValue('productId', value?.id ?? undefined);
-  }
 }
 
 ProductImage.init(
@@ -82,15 +73,5 @@ ProductImage.init(
     ],
   }
 );
-
-Product.hasMany(ProductImage, {
-  foreignKey: 'productId',
-  as: 'images',
-});
-
-ProductImage.belongsTo(Product, {
-  foreignKey: 'productId',
-  as: 'product',
-});
 
 export default ProductImage;
