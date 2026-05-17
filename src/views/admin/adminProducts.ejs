@@ -18,96 +18,47 @@
   <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1><%- title %></h1>
-      <a href="/admin" class="btn btn-secondary">
-        ← Volver al Inicio
+      <a href="/admin" class="btn btn-secondary">← Volver al Inicio</a>
+    </div>
+      <a href="/admin/products/create" class="btn btn-primary">
+        ➕ Crear Producto
       </a>
-    </div>
-
-    <!-- Create Product Button -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProductModal">
-      ➕ Crear Producto
-    </button>
   </div>
 
-  <!-- Create Product Modal -->
-  <div class="modal fade" id="createProductModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Crear Nuevo Producto</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <form id="createProductForm">
-            <div class="mb-3">
-              <label for="productName" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="productName" required>
-            </div>
-            <div class="mb-3">
-              <label for="productPrice" class="form-label">Precio</label>
-              <input type="number" step="0.01" class="form-control" id="productPrice" required>
-            </div>
-            <div class="mb-3">
-              <label for="productCategory" class="form-label">Categoría</label>
-              <select class="form-select" id="productCategory" required>
-                <option value="">Selecciona una categoría</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="productDescription" class="form-label">Descripción</label>
-              <textarea class="form-control" id="productDescription" rows="3"></textarea>
-            </div>
-            <div class="form-check form-switch mb-3">
-              <input class="form-check-input" type="checkbox" id="showToClients" checked>
-              <label class="form-check-label" for="showToClients">
-                Mostrar al cliente
-              </label>
-            </div>
-            <div class="form-check form-switch mb-3">
-              <input class="form-check-input" type="checkbox" id="outStock" checked>
-              <label class="form-check-label" for="outStock">
-                Sin Stock
-              </label>
-            </div>
-            <button type="submit" class="btn btn-success w-100">
-              Crear Producto
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <% function getImageMimeType(filename) {
+       const ext = filename?.split('.').pop()?.toLowerCase();
+       const types = {
+         jpg: 'image/jpeg',
+         jpeg: 'image/jpeg',
+         png: 'image/png',
+         gif: 'image/gif',
+         webp: 'image/webp',
+       };
+       return types[ext] || 'image/jpeg';
+     }
+  %>
 
+  <!-- Product List -->
+  <div class="container mt-4">
     <% if (products.length === 0) { %>
-      <div class="alert alert-info">
-        No se encontraron productos.
-      </div>
+      <div class="alert alert-info">No se encontraron productos.</div>
     <% } else { %>
       <div class="row">
         <% products.forEach(product => { %>
           <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100 shadow-sm">
               <div class="card-body">
-                <% if (product.image) { %>
-                  <img src="<%= product.image %>" alt="<%= product.name %>" class="img-fluid mb-3 rounded" style="max-height: 200px; object-fit: cover;">
+                <% if (product.images && product.images.length > 0) { %>
+                  <img src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>" alt="<%= product.name %>" class="img-fluid mb-3 rounded" style="max-height: 200px; object-fit: cover;">
                 <% } %>
                 <h5 class="card-title"><%= product.name %></h5>
-                <p class="card-text">
-                  <strong class="text-primary">$<%= product.price %></strong>
-                </p>
+                <p class="card-text"><strong class="text-primary">$<%= product.price %></strong></p>
                 <% if (product.description) { %>
-                  <p class="card-text text-muted">
-                    <%= product.description %>
-                  </p>
+                  <p class="card-text text-muted"><%= product.description %></p>
                 <% } %>
                 <p class="card-text">
                   <small class="text-muted">
-                    Categoría: 
-                    <% if (product.category) { %>
-                      <%= product.category.name %>
-                    <% } else { %>
-                      Sin categoría
-                    <% } %>
+                    Categoría: <%= product.category ? product.category.name : 'Sin categoría' %>
                   </small>
                 </p>
                 <div class="d-flex gap-2">
@@ -117,6 +68,12 @@
                   <span class="badge <%= product.showToClients ? 'bg-info' : 'bg-secondary' %>">
                     <%= product.showToClients ? 'Visible' : 'Oculto' %>
                   </span>
+                  <a href="/admin/products/<%= product.id %>/edit" class="btn btn-sm btn-warning">
+                    ✏️ Editar
+                  </a>
+                  <button onclick="deleteProduct(<%= product.id %>)" class="btn btn-sm btn-danger">
+                    🗑️ Eliminar
+                  </button>
                 </div>
               </div>
             </div>
@@ -126,6 +83,26 @@
     <% } %>
   </div>
 
+  <script>
+    function deleteProduct(id) {
+      if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+        fetch('/admin/products/' + id, { method: 'DELETE' })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              alert('Producto eliminado correctamente');
+              window.location.reload();
+            } else {
+              alert('Error al eliminar producto: ' + data.message);
+            }
+          })
+          .catch(err => {
+            alert('Error al eliminar producto');
+          });
+      }
+    }
+  </script>
+
   <!-- Footer -->
   <footer class="bg-dark text-white py-4 mt-5">
     <div class="container text-center">
@@ -133,62 +110,6 @@
     </div>
   </footer>
 
-  <script>
-    // Populate category dropdown
-    const categorySelect = document.getElementById('productCategory');
-    const categories = [
-      <% products.forEach(p => { if (p.category) { %>
-        { value: "<%= p.category.id %>", text: "<%= p.category.name %>" },
-      <% }) %><% if (products.length === 0) { %>
-        { value: "1", text: "Gossip Cases cargadores" },
-        { value: "2", text: "Gossip Cases AirPods" },
-        { value: "3", text: "Catálogo Fundas iP." },
-        { value: "4", text: "catálogo exclusivo" },
-        { value: "5", text: "stock disponible" },
-      <% } %>
-    ];
-    categories.forEach(cat => {
-      categorySelect.innerHTML += `<option value="${cat.value}">${cat.text}</option>`;
-    });
-
-    // Handle form submission
-    document.getElementById('createProductForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const formData = new FormData(e.target);
-      const data = {
-        name: formData.get('productName'),
-        price: parseFloat(formData.get('productPrice')),
-        categoryId: parseInt(formData.get('productCategory')),
-        description: formData.get('productDescription'),
-        showToClients: formData.get('showToClients') === 'on',
-        outStock: formData.get('outStock') === 'on',
-        image: null,
-      };
-
-      try {
-        const response = await fetch('/admin/products', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-        if (result.success) {
-          alert('Producto creado exitosamente');
-          document.getElementById('createProductModal').classList.remove('show');
-          document.getElementById('createProductForm').reset();
-          // Reload products list
-          window.location.reload();
-        } else {
-          alert('Error al crear producto: ' + result.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Error al crear producto');
-      }
-    });
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

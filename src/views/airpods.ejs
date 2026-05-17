@@ -13,6 +13,19 @@
     <link rel="stylesheet" href="/css/home.css">
 </head>
 
+<% function getImageMimeType(filename) {
+       const ext = filename?.split('.').pop()?.toLowerCase();
+       const types = {
+         jpg: 'image/jpeg',
+         jpeg: 'image/jpeg',
+         png: 'image/png',
+         gif: 'image/gif',
+         webp: 'image/webp',
+       };
+       return types[ext] || 'image/jpeg';
+     }
+ %>
+
 <body>
     <%- include('partials/topbar') %>
 
@@ -52,8 +65,13 @@
 
                                 <div class="card product-card">
 
-                                    <img src="<%= product.image || '/images/no-image.png' %>"
+                                    <% if (product.images && product.images.length > 0) { %>
+                                    <img src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>"
                                         class="card-img-top product-img" alt="<%= product.name %>">
+                                    <% } else { %>
+                                    <img src="/images/no-image.png"
+                                        class="card-img-top product-img" alt="<%= product.name %>">
+                                    <% } %>
 
                                     <div class="card-body">
 

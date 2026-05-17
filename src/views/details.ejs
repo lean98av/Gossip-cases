@@ -21,6 +21,19 @@
     <link rel="stylesheet" href="/css/detail.css">
 </head>
 
+<% function getImageMimeType(filename) {
+       const ext = filename?.split('.').pop()?.toLowerCase();
+       const types = {
+         jpg: 'image/jpeg',
+         jpeg: 'image/jpeg',
+         png: 'image/png',
+         gif: 'image/gif',
+         webp: 'image/webp',
+       };
+       return types[ext] || 'image/jpeg';
+     }
+ %>
+
 <body>
 
     <%- include('partials/topbar') %>
@@ -34,12 +47,21 @@
 
                 <div class="card border-0 shadow-sm">
 
+                    <% if (product.images && product.images.length > 0) { %>
                     <img
                         id="detailImage"
-                        src="<%= product.image || '/images/no-image.png' %>"
+                        src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>"
                         alt="<%= product.name %>"
                         class="card-img-top product-img"
                     >
+                    <% } else { %>
+                    <img
+                        id="detailImage"
+                        src="/images/no-image.png"
+                        alt="<%= product.name %>"
+                        class="card-img-top product-img"
+                    >
+                    <% } %>
 
                 </div>
 

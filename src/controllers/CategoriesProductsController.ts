@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Category from '../models/category';
 import Product from '../models/product';
+import ProductImage from '../models/productImage';
 
 export default {
   async getCargadores(req: Request, res: Response) {
@@ -10,6 +11,10 @@ export default {
         return res.status(404).json({ success: false, error: 'Categoría no encontrada' });
       }
       const products = await Product.findAll({
+         include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
         where: {
           categoryId: 1,
           showToClients: true,
@@ -38,6 +43,10 @@ export default {
         return res.status(404).json({ success: false, error: 'Categoría no encontrada' });
       }
       const products = await Product.findAll({
+           include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
         where: {
           categoryId: 2,
           showToClients: true,
@@ -63,6 +72,10 @@ export default {
         return res.status(404).json({ success: false, error: 'Categoría no encontrada' });
       }
       const products = await Product.findAll({
+          include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
         where: {
           categoryId: 3,
           showToClients: true,
@@ -88,6 +101,10 @@ export default {
         return res.status(404).json({ success: false, error: 'Categoría no encontrada' });
       }
       const products = await Product.findAll({
+          include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
         where: {
           categoryId: 4,
           showToClients: true,
@@ -109,11 +126,14 @@ export default {
   async getStockDiponible(req: Request, res: Response) {
     try {
       const products = await Product.findAll({
+          include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
         where: {
           showToClients: true,
           outStock: false,
         },
-        include: [{ model: Category, as: 'category' }],
         order: [['createdAt', 'DESC']],
       });
 

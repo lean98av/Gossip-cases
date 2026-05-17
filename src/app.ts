@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { HomeController } from './controllers/homeController';
+import multer from 'multer';
 
 const app = express();
 
@@ -30,6 +31,39 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
+app.use('/admin/js', express.static(path.join(__dirname, '../src/views/admin/js')));
+
+// Multer configuration for file uploads
+const storage = multer.diskStorage({
+  destination: (req: any, file: any, cb: any) => {
+    cb(null, path.join(__dirname, '../uploads/'));
+  },
+  filename: (req: any, file: any, cb: any) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
+  fileFilter: (req: any, file: any, cb: any) => {
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (validTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Solo se permiten imágenes JPG, PNG, GIF y WebP'));
+    }
+  },
+});
+
+// File upload route for create product
+app.post('/upload-product', upload.single('image'), async (req: any, res: any, next: any) => {
+  try {
+    res.json({ success: true, file: req.file });
+  } catch (error) {
+    next(error);
+  }
+});
 
 // CORS
 app.use((req: Request, res: Response, next: NextFunction) => {

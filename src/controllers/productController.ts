@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Product, { ProductAttributes } from '../models/product';
+import ProductImage from '../models/productImage';
 import sequelize from '../config/db';
 import { Category } from '../models';
 
@@ -12,7 +13,10 @@ export default {
         where: {
           ...(showToClients === 'false' && { showToClients: false }),
         },
-        include: [{ model: Product, as: 'category' }],
+        include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
         order: [['createdAt', 'DESC']],
       });
 
@@ -30,7 +34,10 @@ export default {
     try {
       const { id } = req.params;
       const product = await Product.findByPk(id, {
-        include: [{ model: Product, as: 'category' }],
+        include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
       });
 
       if (!product) {
@@ -50,11 +57,9 @@ export default {
 
       const product = await Product.findByPk(req.params.id, {
         include: [
-          {
-            model: Category,
-            as: 'category'
-          }
-        ]
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
       });
 
       if (!product) {
