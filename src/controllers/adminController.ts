@@ -149,16 +149,48 @@ export default {
 
       const product = await Product.create(productData);
 
-      // Create image records if files were uploaded
-      if (req.files && (req.files as any).images && (req.files as any).images.length > 0) {
-        const files = (req.files as any).images;
-        for (let i = 0; i < files.length; i++) {
-          await ProductImage.create({
-            productId: product.id,
-            name: files[i].originalname,
-            file: files[i].buffer.toString('base64'),
-          });
-        }
+      // Create image record for Image 1
+      const file1 = (req.files as any).images?.[0];
+      if (file1) {
+        await ProductImage.create({
+          productId: product.id,
+          name: file1.originalname,
+          file: file1.buffer.toString('base64'),
+          order: 1
+        });
+      }
+
+      // Create image record for Image 2
+      const file2 = (req.files as any).images?.[1];
+      if (file2) {
+        await ProductImage.create({
+          productId: product.id,
+          name: file2.originalname,
+          file: file2.buffer.toString('base64'),
+            order: 2
+        });
+      }
+
+      // Create image record for Image 3
+      const file3 = (req.files as any).images?.[2];
+      if (file3) {
+        await ProductImage.create({
+          productId: product.id,
+          name: file3.originalname,
+          file: file3.buffer.toString('base64'),
+            order: 3
+        });
+      }
+
+      // Create image record for Image 4
+      const file4 = (req.files as any).images?.[3];
+      if (file4) {
+        await ProductImage.create({
+          productId: product.id,
+          name: file4.originalname,
+          file: file4.buffer.toString('base64'),
+            order: 4
+        });
       }
 
       res.json({ success: true, data: product });
@@ -188,26 +220,55 @@ export default {
         outStock: outStock === 'true',
       });
 
-      // Delete images if specified
-      if (deleteImages && Array.isArray(deleteImages)) {
+      // Delete images to create new ones
         await ProductImage.destroy({
           where: {
-            id: deleteImages,
             productId: id,
           },
         });
+console.log("imagenes log:" , req.files)
+      // Add new image for Image 1
+      const file1 = (req.files as any).images?.[0];
+      if (file1) {
+        await ProductImage.create({
+          productId: product.id,
+          name: file1.originalname,
+          file: file1.buffer.toString('base64'),
+            order: 1
+        });
       }
 
-      // Add new images if uploaded
-      if (req.files && (req.files as any).images && (req.files as any).images.length > 0) {
-        const files = (req.files as any).images;
-        for (let i = 0; i < files.length; i++) {
-          await ProductImage.create({
-            productId: product.id,
-            name: files[i].originalname,
-            file: files[i].buffer.toString('base64'),
-          });
-        }
+      // Add new image for Image 2
+      const file2 = (req.files as any).images?.[1];
+      if (file2) {
+        await ProductImage.create({
+          productId: product.id,
+          name: file2.originalname,
+          file: file2.buffer.toString('base64'),
+            order: 2
+        });
+      }
+
+      // Add new image for Image 3
+      const file3 = (req.files as any).images?.[2];
+      if (file3) {
+        await ProductImage.create({
+          productId: product.id,
+          name: file3.originalname,
+          file: file3.buffer.toString('base64'),
+            order: 3
+        });
+      }
+
+      // Add new image for Image 4
+      const file4 = (req.files as any).images?.[3];
+      if (file4) {
+        await ProductImage.create({
+          productId: product.id,
+          name: file4.originalname,
+          file: file4.buffer.toString('base64'),
+            order: 4
+        });
       }
 
       res.json({ success: true, data: product });

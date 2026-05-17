@@ -119,11 +119,6 @@
       return;
     }
 
-    const deleteIds = deleteImagesInput.value
-      .split(',')
-      .map(id => id.trim())
-      .filter(Boolean);
-
     const isEdit = Boolean(product && product.id);
     const requestUrl = isEdit ? `/admin/products/${product.id}` : '/admin/products';
     const requestMethod = isEdit ? 'PUT' : 'POST';
@@ -137,22 +132,68 @@
       formData.append('showToClients', String(showToClients));
       formData.append('outStock', String(outStock));
 
-      // Collect all 4 images with their order numbers
-      for (let i = 1; i <= 4; i++) {
-        const imgInput = document.getElementById(`productImage${i}`);
-        if (imgInput && imgInput.files.length > 0) {
-          const file = imgInput.files[0];
-          if (file.size > 2 * 1024 * 1024) {
-            alert('La imagen ' + i + ' no puede ser mayor a 2MB');
-            return;
-          }
-          const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-          if (!validTypes.includes(file.type)) {
-            alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen ' + i);
-            return;
-          }
-          formData.append('images', file);
+      // Imagen 1
+      const img1 = document.getElementById('productImage1');
+      if (img1 && img1.files.length > 0) {
+        const file = img1.files[0];
+        if (file.size > 2 * 1024 * 1024) {
+          alert('La imagen 1 no puede ser mayor a 2MB');
+          return;
         }
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+          alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen 1');
+          return;
+        }
+        formData.append('images', file);
+      }
+
+      // Imagen 2
+      const img2 = document.getElementById('productImage2');
+      if (img2 && img2.files.length > 0) {
+        const file = img2.files[0];
+        if (file.size > 2 * 1024 * 1024) {
+          alert('La imagen 2 no puede ser mayor a 2MB');
+          return;
+        }
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+          alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen 2');
+          return;
+        }
+        formData.append('images', file);
+      }
+
+      // Imagen 3
+      const img3 = document.getElementById('productImage3');
+      if (img3 && img3.files.length > 0) {
+        const file = img3.files[0];
+        if (file.size > 2 * 1024 * 1024) {
+          alert('La imagen 3 no puede ser mayor a 2MB');
+          return;
+        }
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+          alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen 3');
+          return;
+        }
+        formData.append('images', file);
+      }
+
+      // Imagen 4
+      const img4 = document.getElementById('productImage4');
+      if (img4 && img4.files.length > 0) {
+        const file = img4.files[0];
+        if (file.size > 2 * 1024 * 1024) {
+          alert('La imagen 4 no puede ser mayor a 2MB');
+          return;
+        }
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+          alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen 4');
+          return;
+        }
+        formData.append('images', file);
       }
 
       const response = await fetch(requestUrl, {
