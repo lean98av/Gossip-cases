@@ -35,6 +35,19 @@
     <% } %>
   </div>
 
+  <% function getImageMimeType(filename) {
+       const ext = filename?.split('.').pop()?.toLowerCase();
+       const types = {
+         jpg: 'image/jpeg',
+         jpeg: 'image/jpeg',
+         png: 'image/png',
+         gif: 'image/gif',
+         webp: 'image/webp',
+       };
+       return types[ext] || 'image/jpeg';
+     }
+  %>
+
   <!-- Product List -->
   <div class="container mt-4">
     <% if (products.length === 0) { %>
@@ -46,7 +59,7 @@
             <div class="card h-100 shadow-sm">
               <div class="card-body">
                 <% if (product.images && product.images.length > 0) { %>
-                  <img src="<%= product.images[0].file %>" alt="<%= product.name %>" class="img-fluid mb-3 rounded" style="max-height: 200px; object-fit: cover;">
+                  <img src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>" alt="<%= product.name %>" class="img-fluid mb-3 rounded" style="max-height: 200px; object-fit: cover;">
                 <% } %>
                 <h5 class="card-title"><%= product.name %></h5>
                 <p class="card-text"><strong class="text-primary">$<%= product.price %></strong></p>

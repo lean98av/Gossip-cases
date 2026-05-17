@@ -11,6 +11,22 @@
     });
   }
 
+  function getImageMimeType(filename) {
+    const ext = filename?.split('.').pop()?.toLowerCase();
+    const types = {
+      jpg: 'image/jpeg',
+      jpeg: 'image/jpeg',
+      png: 'image/png',
+      gif: 'image/gif',
+      webp: 'image/webp',
+    };
+    return types[ext] || 'image/jpeg';
+  }
+
+  function getImageDataUrl(base64Data, filename) {
+    return `data:${getImageMimeType(filename)};base64,${base64Data}`;
+  }
+
   if (product) {
     document.getElementById('productName').value = product.name || '';
     document.getElementById('productPrice').value = product.price ?? '';
@@ -22,7 +38,7 @@
     if (product.images && product.images.length > 0) {
       document.getElementById('productImage').value = '';
       if (product.images[0].file) {
-        document.getElementById('imagePreviewImg').src = product.images[0].file;
+        document.getElementById('imagePreviewImg').src = getImageDataUrl(product.images[0].file, product.images[0].name);
         document.getElementById('imagePreview').style.display = 'block';
       }
     }
