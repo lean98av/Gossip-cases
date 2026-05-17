@@ -10,172 +10,150 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600;700&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/detail.css">
 </head>
 
-<% function getImageMimeType(filename) {
-       const ext = filename?.split('.').pop()?.toLowerCase();
-       const types = {
-         jpg: 'image/jpeg',
-         jpeg: 'image/jpeg',
-         png: 'image/png',
-         gif: 'image/gif',
-         webp: 'image/webp',
-       };
-       return types[ext] || 'image/jpeg';
-     }
- %>
+<% function getImageMimeType(filename) { const ext=filename?.split('.').pop()?.toLowerCase(); const types={
+    jpg: 'image/jpeg' , jpeg: 'image/jpeg' , png: 'image/png' , gif: 'image/gif' , webp: 'image/webp' , }; return
+    types[ext] || 'image/jpeg' ; } %>
 
-<body>
+    <body>
 
-    <%- include('partials/topbar') %>
+        <%- include('partials/topbar') %>
 
-    <main class="container mb-5 mt-5">
+            <main class="container mb-5 mt-5">
 
-        <div class="row g-4">
+                <div class="row g-4">
 
-            <!-- IMAGEN -->
-            <div class="col-lg-6">
+                    <!-- IMAGEN -->
+                    <div class="col-lg-6">
 
-                <div class="card border-0 shadow-sm">
+                        <div class="card border-0 shadow-sm">
 
-                    <% if (product.images && product.images.length > 0) { %>
-                    <img
-                        id="detailImage"
-                        src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>"
-                        alt="<%= product.name %>"
-                        class="card-img-top product-img"
-                    >
-                    <% } else { %>
-                    <img
-                        id="detailImage"
-                        src="/images/no-image.png"
-                        alt="<%= product.name %>"
-                        class="card-img-top product-img"
-                    >
-                    <% } %>
-
-                </div>
-
-            </div>
-
-            <!-- INFO -->
-            <div class="col-lg-6">
-
-                <div class="card border-0 shadow-sm p-4 h-100">
-
-                    <div class="card-body">
-
-                        <!-- TITULO -->
-                        <h2
-                            id="detailTitle"
-                            class="mb-3"
-                        >
-
-                            <%= product.name %>
-
-                        </h2>
-
-                        <!-- PRECIO -->
-                        <div
-                            id="detailPrice"
-                            class="modal-price mb-3"
-                        >
-
-                            $<%= Number(product.price).toFixed(2) %>
-
-                        </div>
-
-                        <!-- DESCRIPCION -->
-                        <p
-                            id="detailDescription"
-                            class="text-muted mb-4"
-                        >
-
-                            <%= product.description || 'Sin descripción disponible.' %>
-
-                        </p>
-
-                        <!-- INFO -->
-                        <div class="modal-specs mb-4">
-
-                            <h6>
-                                Información del Producto
-                            </h6>
-
-                            <p class="mb-2">
-
-                                <strong>Categoría:</strong>
-
-                                <span id="detailCategory">
-
-                                    <%= product.category?.name || 'Sin categoría' %>
-
-                                </span>
-
-                            </p>
-
-                            <p class="mb-2">
-
-                                <strong>Disponibilidad:</strong>
-
-                                <% if(product.outStock) { %>
-
-                                    <span class="text-danger">
-                                        Sin stock
-                                    </span>
-
+                            <% if (product.images && product.images.length> 0) { %>
+                                <img id="detailImage"
+                                    src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>"
+                                    alt="<%= product.name %>" class="card-img-top product-img">
                                 <% } else { %>
-
-                                    <span class="text-success">
-                                        En stock
-                                    </span>
-
-                                <% } %>
-
-                            </p>
+                                    <img id="detailImage" src="/images/no-image.png" alt="<%= product.name %>"
+                                        class="card-img-top product-img">
+                                    <% } %>
 
                         </div>
 
-                        <!-- BOTONES -->
-                        <button class="btn btn-primary w-100 mb-3">
+                    </div>
 
-                            <i class="fas fa-shopping-bag"></i>
+                    <!-- INFO -->
+                    <div class="col-lg-6">
 
-                            Comprar Ahora
+                        <div class="card border-0 shadow-sm p-4 h-100">
 
-                        </button>
+                            <div class="card-body">
 
-                        <button class="btn btn-outline-primary w-100">
+                                <!-- TITULO -->
+                                <h2 id="detailTitle" class="mb-3">
 
-                            <i class="fas fa-cart-plus"></i>
+                                    <%= product.name %>
 
-                            Agregar al Carrito
+                                </h2>
 
-                        </button>
+                                <!-- PRECIO -->
+                                <div id="detailPrice" class="modal-price mb-3">
+
+                                    $<%= Number(product.price).toFixed(2) %>
+
+                                </div>
+
+                                <!-- DESCRIPCION -->
+                                <p id="detailDescription" class="text-muted mb-4">
+
+                                    <%= product.description || 'Sin descripción disponible.' %>
+
+                                </p>
+
+                                <!-- INFO -->
+                                <div class="modal-specs mb-4">
+
+                                    <h6>
+                                        Información del Producto
+                                    </h6>
+
+                                    <p class="mb-2">
+
+                                        <strong>Categoría:</strong>
+
+                                        <span id="detailCategory">
+
+                                            <%= product.category?.name || 'Sin categoría' %>
+
+                                        </span>
+
+                                    </p>
+
+                                    <p class="mb-2">
+
+                                        <strong>Disponibilidad:</strong>
+
+                                        <% if(product.outStock) { %>
+
+                                            <span class="text-danger">
+                                                Sin stock
+                                            </span>
+
+                                            <% } else { %>
+
+                                                <span class="text-success">
+                                                    En stock
+                                                </span>
+
+                                                <% } %>
+
+                                    </p>
+
+                                </div>
+
+                                <!-- BOTONES -->
+                                <button class="btn btn-primary w-100 mb-3">
+
+                                    <i class="fas fa-shopping-bag"></i>
+
+                                    Comprar Ahora
+
+                                </button>
+
+                                <form action="/cart/add/<%= product.id %>" method="POST">
+
+                                    <button class="btn btn-outline-primary w-100">
+
+                                        <i class="fas fa-cart-plus"></i>
+
+                                        Agregar al Carrito
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+            </main>
 
-        </div>
+            <%- include('partials/footer') %>
 
-    </main>
+                <script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-    <%- include('partials/footer') %>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-</body>
+    </body>
 
 </html>

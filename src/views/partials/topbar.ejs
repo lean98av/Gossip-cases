@@ -1,88 +1,165 @@
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-    <div class="container-fluid px-3">
+    <div class="container px-3">
 
-        <a class="navbar-brand d-flex align-items-center" href="/">
-            <span class="navbar-logo-container me-2">
+        <!-- LOGO -->
+        <a class="navbar-brand d-flex align-items-center ms-2 ms-lg-0" href="/">
+            <span class="navbar-logo-container">
                 <img src="/images/logo.png" alt="Gossip Cases" class="navbar-logo" />
             </span>
         </a>
-        <!-- Hamburger toggles collapse that will contain stacked category cards on mobile -->
-        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+        <!-- MOBILE HAMBURGER -->
+        <button class="navbar-toggler collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+
             <span class="navbar-toggler-icon"></span>
-            <span class="navbar-toggler-close" aria-hidden="true">✕</span>
+
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown d-none d-lg-block">
-                    <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
-                        data-bs-toggle="dropdown">
+
+            <!-- DESKTOP -->
+            <ul class="navbar-nav ms-auto d-none d-lg-flex align-items-center">
+
+                <!-- CATEGORÍAS -->
+                <li class="nav-item mega-dropdown">
+
+                    <a class="nav-link mega-toggle" href="#">
                         Categorías
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                        <li><a class="dropdown-item" href="/cargadores">Cargadores</a></li>
-                        <li><a class="dropdown-item" href="/airpods">AirPods</a></li>
-                        <li><a class="dropdown-item" href="/fundas">Fundas</a></li>
-                        <li><a class="dropdown-item" href="/gossip-exclusive">Gossip Exclusive Cases</a></li>
-                    </ul>
+
+                    <!-- MEGA MENU -->
+                    <div class="mega-menu">
+
+                        <div class="mega-grid">
+
+                            <!-- CARGADORES -->
+                            <a href="/cargadores" class="category-nav-card">
+                                <img src="/images/cargadores.png" alt="Cargadores">
+
+                                <div class="category-nav-overlay">
+                                    <h6>Cargadores</h6>
+                                </div>
+                            </a>
+
+                            <!-- AIRPODS -->
+                            <a href="/airpods" class="category-nav-card">
+                                <img src="/images/airpods.png" alt="AirPods">
+
+                                <div class="category-nav-overlay">
+                                    <h6>AirPods</h6>
+                                </div>
+                            </a>
+
+                            <!-- FUNDAS -->
+                            <a href="/fundas" class="category-nav-card">
+                                <img src="/images/fundas.png" alt="Fundas">
+
+                                <div class="category-nav-overlay">
+                                    <h6>Fundas</h6>
+                                </div>
+                            </a>
+
+                            <!-- GOSSIP -->
+                            <a href="/gossip-exclusive" class="category-nav-card">
+                                <img src="/images/gossip-exclusive.png" alt="Gossip Exclusive">
+
+                                <div class="category-nav-overlay">
+                                    <h6>Gossip Exclusive</h6>
+                                </div>
+                            </a>
+
+                        </div>
+
+                    </div>
+
                 </li>
+
+                <!-- CARRITO -->
+                <li class="nav-item ms-3">
+
+                    <a href="/cart" class="cart-btn">
+
+                        <i class="fas fa-shopping-bag"></i>
+
+                        <span class="cart-text">
+                            Carrito
+                        </span>
+
+                        <% if (cart && cart.length > 0) { %>
+
+                            <span class="cart-badge">
+                                <%= cart.length %>
+                            </span>
+
+                        <% } %>
+
+                    </a>
+
+                </li>
+
             </ul>
 
-            <!-- Stacked rectangular category cards (visible when collapse is open on mobile) -->
+            <!-- MOBILE CATEGORY GRID -->
             <div class="category-grid d-lg-none w-100 mt-3">
+
                 <a href="/cargadores" class="category-nav-card">
                     <img src="/images/cargadores.png" alt="Cargadores">
-                    <div class="category-nav-overlay"><h6>Cargadores</h6></div>
+
+                    <div class="category-nav-overlay">
+                        <h6>Cargadores</h6>
+                    </div>
                 </a>
+
                 <a href="/airpods" class="category-nav-card">
                     <img src="/images/airpods.png" alt="AirPods">
-                    <div class="category-nav-overlay"><h6>AirPods</h6></div>
+
+                    <div class="category-nav-overlay">
+                        <h6>AirPods</h6>
+                    </div>
                 </a>
+
                 <a href="/fundas" class="category-nav-card">
                     <img src="/images/fundas.png" alt="Fundas">
-                    <div class="category-nav-overlay"><h6>Fundas</h6></div>
+
+                    <div class="category-nav-overlay">
+                        <h6>Fundas</h6>
+                    </div>
                 </a>
+
                 <a href="/gossip-exclusive" class="category-nav-card">
                     <img src="/images/gossip-exclusive.png" alt="Gossip Exclusive">
-                    <div class="category-nav-overlay"><h6>Gossip Exclusive</h6></div>
+
+                    <div class="category-nav-overlay">
+                        <h6>Gossip Exclusive</h6>
+                    </div>
                 </a>
+
             </div>
+
+            <!-- MOBILE CART -->
+            <a href="/cart" class="mobile-cart-btn d-lg-none">
+
+                <i class="fas fa-shopping-bag"></i>
+
+                <span>
+                    Ver carrito
+                </span>
+
+                <% if (cart && cart.length > 0) { %>
+
+                    <span class="cart-badge">
+                        <%= cart.length %>
+                    </span>
+
+                <% } %>
+
+            </a>
+
         </div>
+
     </div>
 </nav>
-
-<!-- Offcanvas panel containing category grid for mobile -->
-<div class="offcanvas offcanvas-top offcanvas-category" tabindex="-1" id="categoryOffcanvas" aria-labelledby="categoryOffcanvasLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="categoryOffcanvasLabel">Categorías</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body py-3">
-        <div class="category-grid">
-            <!-- CARGADORES -->
-            <a href="/cargadores" class="category-nav-card">
-                    <img src="/images/cargadores.png" alt="Cargadores">
-                    <div class="category-nav-overlay"><h6>Cargadores</h6></div>
-            </a>
-
-            <!-- AIRPODS -->
-            <a href="/airpods" class="category-nav-card">
-                    <img src="/images/airpods.png" alt="AirPods">
-                    <div class="category-nav-overlay"><h6>AirPods</h6></div>
-            </a>
-
-            <!-- FUNDAS -->
-            <a href="/fundas" class="category-nav-card">
-                    <img src="/images/fundas.png" alt="Fundas">
-                    <div class="category-nav-overlay"><h6>Fundas</h6></div>
-            </a>
-
-            <!-- GOSSIP -->
-            <a href="/gossip-exclusive" class="category-nav-card">
-                    <img src="/images/gossip-exclusive.png" alt="Gossip Exclusive">
-                    <div class="category-nav-overlay"><h6>Gossip Exclusive</h6></div>
-            </a>
-        </div>
-    </div>
-</div>
