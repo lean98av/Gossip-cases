@@ -15,7 +15,7 @@ export default {
         },
         include: [
           { model: Category, as: 'category' },
-          { model: ProductImage, as: 'images' },
+          { model: ProductImage, as: 'images', order: [['order', 'ASC']] },
         ],
         order: [['createdAt', 'DESC']],
       });

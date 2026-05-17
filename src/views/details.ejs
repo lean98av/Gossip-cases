@@ -43,30 +43,40 @@
         <div class="row g-4">
 
             <!-- IMAGEN -->
-            <div class="col-lg-6">
+           <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <% if (product.images && product.images.length > 0) { %>
+                <!-- Imagen principal -->
+                <img
+                    id="mainImage"
+                    src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>"
+                    alt="<%= product.name %>"
+                    class="card-img-top product-img mb-3"
+                    style="max-height:400px; object-fit:contain;"
+                >
 
-                <div class="card border-0 shadow-sm">
-
-                    <% if (product.images && product.images.length > 0) { %>
+                <!-- Miniaturas -->
+                <div class="d-flex gap-2">
+                    <% product.images.forEach((img, idx) => { %>
                     <img
-                        id="detailImage"
-                        src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>"
-                        alt="<%= product.name %>"
-                        class="card-img-top product-img"
+                        src="data:<%= getImageMimeType(img.name) %>;base64,<%= img.file %>"
+                        alt="<%= product.name %> <%= idx+1 %>"
+                        class="img-thumbnail"
+                        style="width:80px; height:80px; object-fit:cover; cursor:pointer;"
+                        onclick="document.getElementById('mainImage').src=this.src"
                     >
-                    <% } else { %>
-                    <img
-                        id="detailImage"
-                        src="/images/no-image.png"
-                        alt="<%= product.name %>"
-                        class="card-img-top product-img"
-                    >
-                    <% } %>
-
+                    <% }) %>
                 </div>
-
+                <% } else { %>
+                <img
+                    id="mainImage"
+                    src="/images/no-image.png"
+                    alt="<%= product.name %>"
+                    class="card-img-top product-img"
+                >
+                <% } %>
             </div>
-
+            </div>
             <!-- INFO -->
             <div class="col-lg-6">
 
