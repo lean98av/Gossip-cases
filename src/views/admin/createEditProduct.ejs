@@ -48,8 +48,38 @@
               </div>
 
               <div class="mb-3">
-                <label for="productImage" class="form-label">Imagen</label>
-                <input type="file" class="form-control" id="productImage" accept="image/*">
+                <label for="productImage1" class="form-label">Imagen principal</label>
+                <input type="file" class="form-control" id="productImage1" accept="image/*">
+                <div class="form-text">
+                  Soporta imágenes JPG, PNG, GIF. Máximo 2MB.
+                </div>
+                <div id="imagePreview" class="mt-2" style="display: none;">
+                  <img id="imagePreviewImg" src="" alt="Vista previa" style="max-height: 200px;">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="productImage2" class="form-label">Imagen2</label>
+                <input type="file" class="form-control" id="productImage2" accept="image/*">
+                <div class="form-text">
+                  Soporta imágenes JPG, PNG, GIF. Máximo 2MB.
+                </div>
+                <div id="imagePreview" class="mt-2" style="display: none;">
+                  <img id="imagePreviewImg" src="" alt="Vista previa" style="max-height: 200px;">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="productImage3" class="form-label">Imagen3</label>
+                <input type="file" class="form-control" id="productImage3" accept="image/*">
+                <div class="form-text">
+                  Soporta imágenes JPG, PNG, GIF. Máximo 2MB.
+                </div>
+                <div id="imagePreview" class="mt-2" style="display: none;">
+                  <img id="imagePreviewImg" src="" alt="Vista previa" style="max-height: 200px;">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="productImage4" class="form-label">Imagen4</label>
+                <input type="file" class="form-control" id="productImage4" accept="image/*">
                 <div class="form-text">
                   Soporta imágenes JPG, PNG, GIF. Máximo 2MB.
                 </div>
@@ -86,23 +116,6 @@
                   Sin Stock
                 </label>
               </div>
-
-              <div class="mb-3">
-                <label class="form-label">Imágenes adicionales (opcional)</label>
-                <input type="file" class="form-control" id="productImages" accept="image/*" multiple>
-                <div class="form-text">
-                  Sube múltiples imágenes adicionales. Máximo 2MB por imagen.
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Imágenes a borrar (opcional)</label>
-                <input type="text" class="form-control" id="deleteImages" placeholder="IDs separados por coma">
-                <div class="form-text">
-                  Ingresa los IDs de las imágenes a eliminar, separados por coma.
-                </div>
-              </div>
-
               <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">
                   <%= title.includes('Create') ? 'Crear Producto' : 'Actualizar Producto' %>

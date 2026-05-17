@@ -152,10 +152,6 @@
         }
       }
 
-      if (deleteIds.length) {
-        formData.append('deleteImages', JSON.stringify(deleteIds));
-      }
-
       const response = await fetch(requestUrl, {
         method: requestMethod,
         body: formData,

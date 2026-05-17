@@ -7,17 +7,21 @@ export interface ProductImageAttributes {
   productId?: number;
   name: string;
   file: string;
+  order: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface ProductImageCreationAttrs extends Optional<ProductImageAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
+export interface ProductImageCreationAttrs extends Optional<ProductImageAttributes, 'id' | 'createdAt' | 'updatedAt'> {
+  order: number;
+}
 
 class ProductImage extends Model<ProductImageAttributes, ProductImageCreationAttrs> {
   public id!: number;
   public productId!: number;
   public name!: string;
   public file!: string;
+  public order!: number;
   public createdAt!: Date;
   public updatedAt!: Date;
 }
@@ -49,6 +53,15 @@ ProductImage.init(
       allowNull: false,
       validate: {
         len: [0, 2097152], // Base64 string max length for 2MB
+      },
+    },
+    order: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+      validate: {
+        min: 1,
+        max: 4,
       },
     },
     createdAt: {

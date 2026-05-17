@@ -11,6 +11,7 @@ export interface ProductAttributes {
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
+  order?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -22,6 +23,7 @@ export interface ProductCreationAttrs extends Optional<ProductAttributes, 'id' |
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
+  order?: number;
   id?: undefined;
   createdAt?: undefined;
   updatedAt?: undefined;
@@ -35,6 +37,7 @@ class Product extends Model<ProductAttributes, ProductCreationAttrs> {
   public categoryId!: number;
   public showToClients!: boolean;
   public outStock!: boolean;
+  public order?: number;
   public createdAt!: Date;
   public updatedAt!: Date;
 
