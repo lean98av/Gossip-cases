@@ -132,6 +132,11 @@ export default {
     }
   },
 
+
+
+
+
+
   // Métodos que retornan JSON
 
   async createProduct(req: Request, res: Response, next: NextFunction) {
@@ -194,6 +199,13 @@ export default {
       next(error);
     }
   },
+
+
+
+
+
+
+
 async editProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
@@ -241,6 +253,8 @@ async editProduct(req: Request, res: Response, next: NextFunction) {
 
 
 
+
+
   async getProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
@@ -262,6 +276,10 @@ async editProduct(req: Request, res: Response, next: NextFunction) {
     }
   },
 
+
+
+
+  
   async deleteProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
