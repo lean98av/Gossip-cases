@@ -93,7 +93,7 @@ export default {
       const product = await Product.findByPk(id, {
         include: [
           { model: Category, as: 'category' },
-          { model: ProductImage, as: 'images', limit: 1, order: [['order', 'ASC']] },
+          { model: ProductImage, as: 'images', order: [['order', 'ASC']] },
         ],
       });
 
@@ -149,7 +149,6 @@ export default {
 
       const product = await Product.create(productData);
       const files = Array.isArray(req.files) ? req.files : (req.files as any).images || [];
-
       const file1 = files[0];
       if (file1) {
         await ProductImage.create({
@@ -195,83 +194,52 @@ export default {
       next(error);
     }
   },
+async editProduct(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id } = req.params;
+    const { name, price, categoryId, description, showToClients, outStock } = req.body;
 
-  async editProduct(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id } = req.params;
-      const { name, price, categoryId, description, showToClients, outStock, deleteImages } = req.body;
-
-      const product = await Product.findByPk(id);
-      if (!product) {
-        res.status(404).json({ success: false, message: 'Producto no encontrado' });
-        return;
-      }
-
-      // Update product data
-      await product.update({
-        name,
-        price: parseFloat(price),
-        categoryId: parseInt(categoryId),
-        description,
-        showToClients: showToClients === 'true',
-        outStock: outStock === 'true',
-      });
-
-      const files = Array.isArray(req.files) ? req.files : (req.files as any).images || [];
-
-      if (files.length > 0) {
-        await ProductImage.destroy({
-          where: {
-            productId: id,
-          },
-        });
-
-        const file1 = files[0];
-        if (file1) {
-          await ProductImage.create({
-            productId: product.id,
-            name: file1.originalname,
-            file: file1.buffer.toString('base64'),
-            order: 1,
-          });
-        }
-
-        const file2 = files[1];
-        if (file2) {
-          await ProductImage.create({
-            productId: product.id,
-            name: file2.originalname,
-            file: file2.buffer.toString('base64'),
-            order: 2,
-          });
-        }
-
-        const file3 = files[2];
-        if (file3) {
-          await ProductImage.create({
-            productId: product.id,
-            name: file3.originalname,
-            file: file3.buffer.toString('base64'),
-            order: 3,
-          });
-        }
-
-        const file4 = files[3];
-        if (file4) {
-          await ProductImage.create({
-            productId: product.id,
-            name: file4.originalname,
-            file: file4.buffer.toString('base64'),
-            order: 4,
-          });
-        }
-      }
-
-      res.json({ success: true, data: product });
-    } catch (error) {
-      next(error);
+    const product = await Product.findByPk(id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Producto no encontrado' });
     }
-  },
+
+    await product.update({
+      name,
+      price: parseFloat(price),
+      categoryId: parseInt(categoryId),
+      description,
+      showToClients: showToClients === 'true',
+      outStock: outStock === 'true',
+    });
+
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const allFiles = Object.values(files).flat();
+
+    for (const file of allFiles) {
+      // El nombre ya es "1","2","3","4"
+      const order = Number(file.originalname);
+
+      if (order >= 1 && order <= 4) {
+        // Si recibo una imagen para ese slot, borro la vieja y guardo la nueva
+        await ProductImage.destroy({ where: { productId: product.id, order } });
+
+        await ProductImage.create({
+          productId: product.id,
+          name: String(order), // se guarda como "1","2","3","4"
+          file: file.buffer.toString('base64'),
+          order,
+        });
+      }
+    }
+
+    res.json({ success: true, data: product });
+  } catch (error) {
+    next(error);
+  }
+},
+
+
 
   async getProduct(req: Request, res: Response, next: NextFunction) {
     try {

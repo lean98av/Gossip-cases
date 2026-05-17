@@ -133,68 +133,39 @@
       formData.append('outStock', String(outStock));
 
       // Imagen 1
+    // Imagen 1
       const img1 = document.getElementById('image1');
       if (img1 && img1.files.length > 0) {
         const file = img1.files[0];
-        if (file.size > 2 * 1024 * 1024) {
-          alert('La imagen 1 no puede ser mayor a 2MB');
-          return;
-        }
-        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        if (!validTypes.includes(file.type)) {
-          alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen 1');
-          return;
-        }
-        formData.append('images', file);
+        const renamedFile = new File([file], "1", { type: file.type });
+        formData.append('images', renamedFile);
       }
 
       // Imagen 2
       const img2 = document.getElementById('image2');
       if (img2 && img2.files.length > 0) {
         const file = img2.files[0];
-        if (file.size > 2 * 1024 * 1024) {
-          alert('La imagen 2 no puede ser mayor a 2MB');
-          return;
-        }
-        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        if (!validTypes.includes(file.type)) {
-          alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen 2');
-          return;
-        }
-        formData.append('images', file);
+        const renamedFile = new File([file], "2", { type: file.type });
+        formData.append('images', renamedFile);
       }
 
       // Imagen 3
       const img3 = document.getElementById('image3');
       if (img3 && img3.files.length > 0) {
         const file = img3.files[0];
-        if (file.size > 2 * 1024 * 1024) {
-          alert('La imagen 3 no puede ser mayor a 2MB');
-          return;
-        }
-        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        if (!validTypes.includes(file.type)) {
-          alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen 3');
-          return;
-        }
-        formData.append('images', file);
+        const renamedFile = new File([file], "3", { type: file.type });
+        formData.append('images', renamedFile);
       }
 
       // Imagen 4
       const img4 = document.getElementById('image4');
       if (img4 && img4.files.length > 0) {
         const file = img4.files[0];
-        if (file.size > 2 * 1024 * 1024) {
-          alert('La imagen 4 no puede ser mayor a 2MB');
-          return;
-        }
-        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        if (!validTypes.includes(file.type)) {
-          alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen 4');
-          return;
-        }
-        formData.append('images', file);
+        const renamedFile = new File([file], "4", { type: file.type });
+        formData.append('images', renamedFile);
       }
+
+      console.log("formData log", formData);
 
       const response = await fetch(requestUrl, {
         method: requestMethod,
