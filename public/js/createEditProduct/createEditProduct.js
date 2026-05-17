@@ -36,15 +36,23 @@
     document.getElementById('outStock').checked = Boolean(product.outStock);
 
     // Set existing images with their order numbers
-    for (let i = 0; i < Math.min(4, product.images.length); i++) {
-      const imgInput = document.getElementById(`image${i + 1}`);
-      const previewContainer = document.getElementById(`imagePreview${i + 1}`);
-      const previewImg = document.getElementById(`imagePreviewImg${i + 1}`);
+    for (let i = 1; i <= 4; i++) {
+      const imgInput = document.getElementById(`image${i}`);
+      const previewContainer = document.getElementById(`imagePreview${i}`);
+      const previewImg = document.getElementById(`imagePreviewImg${i}`);
+      const imageName = `${i}`;
 
-      if (imgInput && product.images[i].file) {
-        imgInput.value = ''; // Clear the file input
-        previewImg.src = getImageDataUrl(product.images[i].file, product.images[i].name);
-        previewContainer.style.display = 'block';
+      if (imgInput && product.images) {
+        // Buscar la imagen que tiene el mismo nombre que el input
+        const matchingImage = product.images.find(img => img.name === imageName);
+        
+        if (matchingImage && matchingImage.file) {
+          imgInput.value = ''; // Clear the file input
+          previewImg.src = getImageDataUrl(matchingImage.file, matchingImage.name);
+          previewContainer.style.display = 'block';
+        } else {
+          previewContainer.style.display = 'none';
+        }
       } else {
         previewContainer.style.display = 'none';
       }
@@ -164,8 +172,6 @@
         const renamedFile = new File([file], "4", { type: file.type });
         formData.append('images', renamedFile);
       }
-
-      console.log("formData log", formData);
 
       const response = await fetch(requestUrl, {
         method: requestMethod,
