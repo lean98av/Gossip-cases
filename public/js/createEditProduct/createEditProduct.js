@@ -35,33 +35,43 @@
     document.getElementById('showToClients').checked = Boolean(product.showToClients);
     document.getElementById('outStock').checked = Boolean(product.outStock);
 
-    if (product.images && product.images.length > 0) {
-      document.getElementById('productImage').value = '';
-      if (product.images[0].file) {
-        document.getElementById('imagePreviewImg').src = getImageDataUrl(product.images[0].file, product.images[0].name);
-        document.getElementById('imagePreview').style.display = 'block';
+    // Set existing images with their order numbers
+    for (let i = 0; i < Math.min(4, product.images.length); i++) {
+      const imgInput = document.getElementById(`productImage${i + 1}`);
+      const previewContainer = document.getElementById(`imagePreview${i + 1}`);
+      const previewImg = document.getElementById(`imagePreviewImg${i + 1}`);
+
+      if (imgInput && product.images[i].file) {
+        imgInput.value = ''; // Clear the file input
+        previewImg.src = getImageDataUrl(product.images[i].file, product.images[i].name);
+        previewContainer.style.display = 'block';
+      } else {
+        previewContainer.style.display = 'none';
       }
     }
   }
 
-  const productImageInput = document.getElementById('productImage');
-  if (productImageInput) {
-    productImageInput.addEventListener('change', function (e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          const preview = document.getElementById('imagePreview');
-          const img = document.getElementById('imagePreviewImg');
-          preview.style.display = 'block';
-          img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+  // Add event listeners for all 4 image inputs
+  for (let i = 1; i <= 4; i++) {
+    const imgInput = document.getElementById(`productImage${i}`);
+    if (imgInput) {
+      imgInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const previewContainer = document.getElementById(`imagePreview${i}`);
+            const previewImg = document.getElementById(`imagePreviewImg${i}`);
+            previewContainer.style.display = 'block';
+            previewImg.src = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
   }
 
-  const form = document.getElementById('productForm');
+   const form = document.getElementById('productForm');
   if (!form) {
     return;
   }
@@ -75,7 +85,6 @@
     const descriptionInput = document.getElementById('productDescription');
     const showToClientsInput = document.getElementById('showToClients');
     const outStockInput = document.getElementById('outStock');
-    const imageInput = document.getElementById('productImage');
     const deleteImagesInput = document.getElementById('deleteImages');
 
     const name = nameInput.value.trim();
@@ -84,7 +93,6 @@
     const description = descriptionInput.value.trim();
     const showToClients = showToClientsInput.checked;
     const outStock = outStockInput.checked;
-    const imageFile = imageInput.files[0];
 
     nameInput.classList.remove('is-invalid');
     priceInput.classList.remove('is-invalid');
@@ -111,18 +119,6 @@
       return;
     }
 
-    if (imageFile) {
-      if (imageFile.size > 2 * 1024 * 1024) {
-        alert('La imagen no puede ser mayor a 2MB');
-        return;
-      }
-      const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-      if (!validTypes.includes(imageFile.type)) {
-        alert('Solo se permiten imágenes JPG, PNG, GIF y WebP');
-        return;
-      }
-    }
-
     const deleteIds = deleteImagesInput.value
       .split(',')
       .map(id => id.trim())
@@ -141,13 +137,20 @@
       formData.append('showToClients', String(showToClients));
       formData.append('outStock', String(outStock));
 
-      if (imageFile) {
-        formData.append('images', imageFile);
-      }
-
-      const additionalFiles = document.getElementById('productImages').files;
-      if (additionalFiles && additionalFiles.length) {
-        for (const file of additionalFiles) {
+      // Collect all 4 images with their order numbers
+      for (let i = 1; i <= 4; i++) {
+        const imgInput = document.getElementById(`productImage${i}`);
+        if (imgInput && imgInput.files.length > 0) {
+          const file = imgInput.files[0];
+          if (file.size > 2 * 1024 * 1024) {
+            alert('La imagen ' + i + ' no puede ser mayor a 2MB');
+            return;
+          }
+          const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+          if (!validTypes.includes(file.type)) {
+            alert('Solo se permiten imágenes JPG, PNG, GIF y WebP en la imagen ' + i);
+            return;
+          }
           formData.append('images', file);
         }
       }

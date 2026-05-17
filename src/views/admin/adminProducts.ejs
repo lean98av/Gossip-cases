@@ -49,7 +49,15 @@
             <div class="card h-100 shadow-sm">
               <div class="card-body">
                 <% if (product.images && product.images.length > 0) { %>
-                  <img src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>" alt="<%= product.name %>" class="img-fluid mb-3 rounded" style="max-height: 200px; object-fit: cover;">
+                  <div class="row">
+                    <% for (let i = 0; i < Math.min(4, product.images.length); i++) { %>
+                      <div class="col-6 mb-2">
+                        <img src="data:<%= getImageMimeType(product.images[i].name) %>;base64,<%= product.images[i].file %>" 
+                            alt="<%= product.name %> Imagen <%= i + 1 %>" 
+                            class="img-fluid rounded" style="max-height: 150px; object-fit: cover;">
+                      </div>
+                    <% } %>
+                  </div>
                 <% } %>
                 <h5 class="card-title"><%= product.name %></h5>
                 <p class="card-text"><strong class="text-primary">$<%= product.price %></strong></p>

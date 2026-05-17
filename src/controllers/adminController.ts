@@ -150,13 +150,13 @@ export default {
       const product = await Product.create(productData);
 
       // Create image records if files were uploaded
-      if (req.files && (req.files as any).length > 0) {
-        const files = req.files as any;
-        for (const file of files) {
+      if (req.files && (req.files as any).images && (req.files as any).images.length > 0) {
+        const files = (req.files as any).images;
+        for (let i = 0; i < files.length; i++) {
           await ProductImage.create({
             productId: product.id,
-            name: file.originalname,
-            file: file.buffer.toString('base64'),
+            name: files[i].originalname,
+            file: files[i].buffer.toString('base64'),
           });
         }
       }
@@ -199,13 +199,13 @@ export default {
       }
 
       // Add new images if uploaded
-      if (req.files && (req.files as any).length > 0) {
-        const files = req.files as any;
-        for (const file of files) {
+      if (req.files && (req.files as any).images && (req.files as any).images.length > 0) {
+        const files = (req.files as any).images;
+        for (let i = 0; i < files.length; i++) {
           await ProductImage.create({
             productId: product.id,
-            name: file.originalname,
-            file: file.buffer.toString('base64'),
+            name: files[i].originalname,
+            file: files[i].buffer.toString('base64'),
           });
         }
       }
