@@ -40,15 +40,6 @@ class Product extends Model<ProductAttributes, ProductCreationAttrs> {
   public order?: number;
   public createdAt!: Date;
   public updatedAt!: Date;
-
-  public get category(): Category | null {
-    const val = this.getDataValue('categoryId') as number;
-    return val ? (Category as any).findByPk(val, { raw: true }) : null;
-  }
-
-  public set category(value: Category | null) {
-    this.setDataValue('categoryId', value?.id || 0);
-  }
 }
 
 Product.init(
