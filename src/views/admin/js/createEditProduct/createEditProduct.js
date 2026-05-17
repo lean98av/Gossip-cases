@@ -163,8 +163,7 @@
       const result = await response.json();
 
       if (result.success) {
-        alert('Producto ' + (title.includes('Create') ? 'creado' : 'actualizado') + ' exitosamente');
-        window.location.reload();
+        window.location.href = '/admin/products';
       } else {
         alert('Error al ' + (title.includes('Create') ? 'crear' : 'actualizar') + ' producto: ' + (result.message || ''));
       }

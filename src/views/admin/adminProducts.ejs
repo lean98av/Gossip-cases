@@ -20,19 +20,9 @@
       <h1><%- title %></h1>
       <a href="/admin" class="btn btn-secondary">← Volver al Inicio</a>
     </div>
-
-    <% if (adminAuth) { %>
       <a href="/admin/products/create" class="btn btn-primary">
         ➕ Crear Producto
       </a>
-      <a href="/admin/logout" class="btn btn-danger">
-        🚪 Cerrar Sesión
-      </a>
-    <% } else { %>
-      <a href="/admin/login" class="btn btn-primary">
-        🔐 Iniciar Sesión
-      </a>
-    <% } %>
   </div>
 
   <% function getImageMimeType(filename) {
