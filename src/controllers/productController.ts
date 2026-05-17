@@ -14,12 +14,8 @@ export default {
           ...(showToClients === 'false' && { showToClients: false }),
         },
         include: [
-          { model: Product, as: 'category' },
-          {
-            model: ProductImage,
-            as: 'images',
-            attributes: ['id', 'name', 'file'],
-          },
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
         ],
         order: [['createdAt', 'DESC']],
       });
@@ -39,12 +35,8 @@ export default {
       const { id } = req.params;
       const product = await Product.findByPk(id, {
         include: [
-          { model: Product, as: 'category' },
-          {
-            model: ProductImage,
-            as: 'images',
-            attributes: ['id', 'name', 'file'],
-          },
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
         ],
       });
 
@@ -65,11 +57,9 @@ export default {
 
       const product = await Product.findByPk(req.params.id, {
         include: [
-          {
-            model: Category,
-            as: 'category'
-          }
-        ]
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images' },
+        ],
       });
 
       if (!product) {
