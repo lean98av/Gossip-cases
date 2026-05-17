@@ -37,7 +37,7 @@
 
     // Set existing images with their order numbers
     for (let i = 0; i < Math.min(4, product.images.length); i++) {
-      const imgInput = document.getElementById(`productImage${i + 1}`);
+      const imgInput = document.getElementById(`image${i + 1}`);
       const previewContainer = document.getElementById(`imagePreview${i + 1}`);
       const previewImg = document.getElementById(`imagePreviewImg${i + 1}`);
 
@@ -53,7 +53,7 @@
 
   // Add event listeners for all 4 image inputs
   for (let i = 1; i <= 4; i++) {
-    const imgInput = document.getElementById(`productImage${i}`);
+    const imgInput = document.getElementById(`image${i}`);
     if (imgInput) {
       imgInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
@@ -133,7 +133,7 @@
       formData.append('outStock', String(outStock));
 
       // Imagen 1
-      const img1 = document.getElementById('productImage1');
+      const img1 = document.getElementById('image1');
       if (img1 && img1.files.length > 0) {
         const file = img1.files[0];
         if (file.size > 2 * 1024 * 1024) {
@@ -149,7 +149,7 @@
       }
 
       // Imagen 2
-      const img2 = document.getElementById('productImage2');
+      const img2 = document.getElementById('image2');
       if (img2 && img2.files.length > 0) {
         const file = img2.files[0];
         if (file.size > 2 * 1024 * 1024) {
@@ -165,7 +165,7 @@
       }
 
       // Imagen 3
-      const img3 = document.getElementById('productImage3');
+      const img3 = document.getElementById('image3');
       if (img3 && img3.files.length > 0) {
         const file = img3.files[0];
         if (file.size > 2 * 1024 * 1024) {
@@ -181,7 +181,7 @@
       }
 
       // Imagen 4
-      const img4 = document.getElementById('productImage4');
+      const img4 = document.getElementById('image4');
       if (img4 && img4.files.length > 0) {
         const file = img4.files[0];
         if (file.size > 2 * 1024 * 1024) {

@@ -70,10 +70,10 @@ export default {
       const products = await Product.findAll({
         include: [
           { model: Category, as: 'category' },
-          { model: ProductImage, as: 'images' },
+          { model: ProductImage, as: 'images', limit: 1, order: [['order', 'ASC']] },
         ],
       });
-
+    
       const categories = await Category.findAll();
 
       res.render('admin/adminProducts', {
@@ -93,7 +93,7 @@ export default {
       const product = await Product.findByPk(id, {
         include: [
           { model: Category, as: 'category' },
-          { model: ProductImage, as: 'images' },
+          { model: ProductImage, as: 'images', limit: 1, order: [['order', 'ASC']] },
         ],
       });
 
@@ -148,48 +148,45 @@ export default {
       };
 
       const product = await Product.create(productData);
+      const files = Array.isArray(req.files) ? req.files : (req.files as any).images || [];
 
-      // Create image record for Image 1
-      const file1 = (req.files as any).images?.[0];
+      const file1 = files[0];
       if (file1) {
         await ProductImage.create({
           productId: product.id,
           name: file1.originalname,
           file: file1.buffer.toString('base64'),
-          order: 1
+          order: 1,
         });
       }
 
-      // Create image record for Image 2
-      const file2 = (req.files as any).images?.[1];
+      const file2 = files[1];
       if (file2) {
         await ProductImage.create({
           productId: product.id,
           name: file2.originalname,
           file: file2.buffer.toString('base64'),
-            order: 2
+          order: 2,
         });
       }
 
-      // Create image record for Image 3
-      const file3 = (req.files as any).images?.[2];
+      const file3 = files[2];
       if (file3) {
         await ProductImage.create({
           productId: product.id,
           name: file3.originalname,
           file: file3.buffer.toString('base64'),
-            order: 3
+          order: 3,
         });
       }
 
-      // Create image record for Image 4
-      const file4 = (req.files as any).images?.[3];
+      const file4 = files[3];
       if (file4) {
         await ProductImage.create({
           productId: product.id,
           name: file4.originalname,
           file: file4.buffer.toString('base64'),
-            order: 4
+          order: 4,
         });
       }
 
@@ -220,55 +217,54 @@ export default {
         outStock: outStock === 'true',
       });
 
-      // Delete images to create new ones
+      const files = Array.isArray(req.files) ? req.files : (req.files as any).images || [];
+
+      if (files.length > 0) {
         await ProductImage.destroy({
           where: {
             productId: id,
           },
         });
-console.log("imagenes log:" , req.files)
-      // Add new image for Image 1
-      const file1 = (req.files as any).images?.[0];
-      if (file1) {
-        await ProductImage.create({
-          productId: product.id,
-          name: file1.originalname,
-          file: file1.buffer.toString('base64'),
-            order: 1
-        });
-      }
 
-      // Add new image for Image 2
-      const file2 = (req.files as any).images?.[1];
-      if (file2) {
-        await ProductImage.create({
-          productId: product.id,
-          name: file2.originalname,
-          file: file2.buffer.toString('base64'),
-            order: 2
-        });
-      }
+        const file1 = files[0];
+        if (file1) {
+          await ProductImage.create({
+            productId: product.id,
+            name: file1.originalname,
+            file: file1.buffer.toString('base64'),
+            order: 1,
+          });
+        }
 
-      // Add new image for Image 3
-      const file3 = (req.files as any).images?.[2];
-      if (file3) {
-        await ProductImage.create({
-          productId: product.id,
-          name: file3.originalname,
-          file: file3.buffer.toString('base64'),
-            order: 3
-        });
-      }
+        const file2 = files[1];
+        if (file2) {
+          await ProductImage.create({
+            productId: product.id,
+            name: file2.originalname,
+            file: file2.buffer.toString('base64'),
+            order: 2,
+          });
+        }
 
-      // Add new image for Image 4
-      const file4 = (req.files as any).images?.[3];
-      if (file4) {
-        await ProductImage.create({
-          productId: product.id,
-          name: file4.originalname,
-          file: file4.buffer.toString('base64'),
-            order: 4
-        });
+        const file3 = files[2];
+        if (file3) {
+          await ProductImage.create({
+            productId: product.id,
+            name: file3.originalname,
+            file: file3.buffer.toString('base64'),
+            order: 3,
+          });
+        }
+
+        const file4 = files[3];
+        if (file4) {
+          await ProductImage.create({
+            productId: product.id,
+            name: file4.originalname,
+            file: file4.buffer.toString('base64'),
+            order: 4,
+          });
+        }
       }
 
       res.json({ success: true, data: product });
@@ -283,7 +279,7 @@ console.log("imagenes log:" , req.files)
       const product = await Product.findByPk(id, {
         include: [
           { model: Category, as: 'category' },
-          { model: ProductImage, as: 'images' },
+          { model: ProductImage, as: 'images', limit: 1, order: [['order', 'ASC']] },
         ],
       });
 

@@ -48,8 +48,8 @@
               </div>
 
               <div class="mb-3">
-                <label for="productImage1" class="form-label">Imagen 1</label>
-                <input type="file" class="form-control" id="productImage1" accept="image/*">
+                <label for="image1" class="form-label">Imagen 1</label>
+                <input type="file" name="images" class="form-control" id="image1" accept="image/*">
                 <div class="form-text">
                   Soporta imágenes JPG, PNG, GIF. Máximo 2MB.
                 </div>
@@ -58,8 +58,8 @@
                 </div>
               </div>
               <div class="mb-3">
-                <label for="productImage2" class="form-label">Imagen 2</label>
-                <input type="file" class="form-control" id="productImage2" accept="image/*">
+                <label for="image2" class="form-label">Imagen 2</label>
+                <input type="file" name="images" class="form-control" id="image2" accept="image/*">
                 <div class="form-text">
                   Soporta imágenes JPG, PNG, GIF. Máximo 2MB.
                 </div>
@@ -68,8 +68,8 @@
                 </div>
               </div>
               <div class="mb-3">
-                <label for="productImage3" class="form-label">Imagen 3</label>
-                <input type="file" class="form-control" id="productImage3" accept="image/*">
+                <label for="image3" class="form-label">Imagen 3</label>
+                <input type="file" name="images" class="form-control" id="image3" accept="image/*">
                 <div class="form-text">
                   Soporta imágenes JPG, PNG, GIF. Máximo 2MB.
                 </div>
@@ -78,8 +78,8 @@
                 </div>
               </div>
               <div class="mb-3">
-                <label for="productImage4" class="form-label">Imagen 4</label>
-                <input type="file" class="form-control" id="productImage4" accept="image/*">
+                <label for="image4" class="form-label">Imagen 4</label>
+                <input type="file" name="images" class="form-control" id="image4" accept="image/*">
                 <div class="form-text">
                   Soporta imágenes JPG, PNG, GIF. Máximo 2MB.
                 </div>
@@ -120,9 +120,9 @@
                 <button type="submit" class="btn btn-primary">
                   <%= title.includes('Create') ? 'Crear Producto' : 'Actualizar Producto' %>
                 </button>
-                <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                  Cancelar
-                </button>
+                <a href="/admin/products" class="btn btn-secondary">
+                  ← Volver
+                </a>
               </div>
             </form>
           </div>
