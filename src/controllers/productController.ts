@@ -15,7 +15,7 @@ export default {
         },
         include: [
           { model: Category, as: 'category' },
-          { model: ProductImage, as: 'images', order: [['order', 'ASC']] },
+          { model: ProductImage, as: 'images', order: [['order', 'DESC']] },
         ],
         order: [['createdAt', 'DESC']],
       });
@@ -68,6 +68,7 @@ export default {
 
       res.render('details', {
         product,
+        category: product.category,
         title: product.name
       });
 
