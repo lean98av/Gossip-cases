@@ -128,6 +128,10 @@
       .map(id => id.trim())
       .filter(Boolean);
 
+    const isEdit = Boolean(product && product.id);
+    const requestUrl = isEdit ? `/admin/products/${product.id}` : '/admin/products';
+    const requestMethod = isEdit ? 'PUT' : 'POST';
+
     try {
       const formData = new FormData();
       formData.append('name', name);
@@ -152,8 +156,8 @@
         formData.append('deleteImages', JSON.stringify(deleteIds));
       }
 
-      const response = await fetch('/admin/products', {
-        method: 'POST',
+      const response = await fetch(requestUrl, {
+        method: requestMethod,
         body: formData,
       });
       const result = await response.json();
