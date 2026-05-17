@@ -40,16 +40,10 @@ router.get('/products', authMiddleware, async (req: Request, res: Response, next
 });
 
 router.get('/products/create', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
-  const products = await Product.findAll({
-    include: [
-      { model: Category, as: 'category' },
-      { model: ProductImage, as: 'images' },
-    ],
-  });
   const categories = await Category.findAll();
   await res.render('admin/createEditProduct', {
     title: 'Create Product',
-    products,
+    product: null,
     categories,
     adminAuth: req.adminAuth,
   });
