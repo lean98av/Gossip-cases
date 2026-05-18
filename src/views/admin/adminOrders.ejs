@@ -210,38 +210,37 @@
   }
 
   async function updateOrderStatus(orderId, newStatus) {
-  try {
-    const response = await fetch('/adminController/updateOrder', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ id: orderId, status: newStatus })
-    });
+    try {
+      const response = await fetch(`/admin/orders/${orderId}/update`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: orderId, status: newStatus })
+      });
 
-    if (!response.ok) {
-      throw new Error('Error al actualizar el estado');
-    }
+      if (!response.ok) {
+        throw new Error('Error al actualizar el estado');
+      }
 
-    const result = await response.json();
-    console.log('Orden actualizada:', result);
+      const result = await response.json();
+      console.log('Orden actualizada:', result);
 
-    // Opcional: refrescar badge en la card y modal
-    const badgeElements = document.querySelectorAll(
-      `[data-id="${orderId}"] .badge, #orderModal-${orderId} .badge`
-    );
-    badgeElements.forEach(badge => {
-      badge.textContent = newStatus;
-      badge.className = 'badge ' + (
-        newStatus === 'pending' ? 'bg-warning' :
-        newStatus === 'inProgress' ? 'bg-info' :
-        newStatus === 'payed' ? 'bg-success' : 'bg-danger'
+      // Actualizar el badge en la card y modal
+      const badgeElements = document.querySelectorAll(
+        `[data-id="${orderId}"] .badge, #orderModal-${orderId} .badge`
       );
-    });
-
-  } catch (error) {
-    console.error(error);
-    alert('No se pudo actualizar el estado');
+      badgeElements.forEach(badge => {
+        badge.textContent = newStatus;
+        badge.className = 'badge ' + (
+          newStatus === 'pending' ? 'bg-warning' :
+          newStatus === 'inProgress' ? 'bg-info' :
+          newStatus === 'payed' ? 'bg-success' : 'bg-danger'
+        );
+      });
+    } catch (error) {
+      console.error(error);
+      alert('No se pudo actualizar el estado');
   }
 }
 
@@ -250,6 +249,18 @@
   sortSelect.addEventListener('change', applyFilters);
   directionSelect.addEventListener('change', applyFilters);
   statusSelect.addEventListener('change', applyFilters);
+
+  // Eventos para actualizar estado de orden
+  const orderStatusSelect = document.getElementById('orderStatus');
+  const orderStatusOptions = orderStatusSelect.querySelectorAll('option');
+  
+  orderStatusOptions.forEach(option => {
+    option.addEventListener('change', () => {
+      const orderId = container.dataset.id;
+      const newStatus = option.value;
+      updateOrderStatus(orderId, newStatus);
+    });
+  });
 
   // Inicial
   applyFilters();
