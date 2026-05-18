@@ -55,7 +55,6 @@ export default {
 
   async home(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log("Admin auth status in home controller:", req.adminAuth);
       res.render('admin/adminHome', {
         title: 'Admin Panel - Gossip Cases',
         adminAuth: req.adminAuth,
@@ -146,12 +145,12 @@ export default {
           address: order.address,
           clientName: order.clientName,
           clientNotes: order.clientNotes,
+          clientPhone: order.clientPhone,
           status: order.status,
           createdAt: order.createdAt,
         };
       });
 
-      console.log(enrichedOrders)
       res.render('admin/adminOrders', {
         title: 'Admin - Ordenes',
         orders: enrichedOrders,

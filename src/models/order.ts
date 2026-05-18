@@ -10,6 +10,7 @@ export interface OrderAttributes {
   address: string;
   clientName: string;
   clientNotes: string;
+  clientPhone: string;
   status: 'pending' | 'inProgress'| 'payed' | 'cancelled';
   createdAt: Date;
   updatedAt: Date;
@@ -18,6 +19,7 @@ export interface OrderAttributes {
 export interface OrderCreationAttrs extends Optional<OrderAttributes, 'id' | 'createdAt' | 'updatedAt'> {
   total: number;
   products: string;
+  clientPhone: string;
   status: 'pending' | 'inProgress'| 'payed' | 'cancelled';
 }
 
@@ -28,6 +30,7 @@ export class Order extends Model<OrderAttributes> implements OrderAttributes {
   public address!: string;
   public clientName!: string;
   public clientNotes!: string;
+  public clientPhone!: string;
   public status!: 'pending' | 'inProgress'| 'payed' | 'cancelled';
   public createdAt!: Date;
   public updatedAt!: Date;
@@ -61,6 +64,10 @@ Order.init(
       allowNull: false,
     },
     clientNotes: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    clientPhone: {
       type: DataTypes.STRING,
       allowNull: false,
     },
