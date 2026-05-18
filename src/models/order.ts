@@ -6,6 +6,7 @@ import OrderProduct from './orderProduct';
 export interface OrderAttributes {
   id: number;
   total: number;
+  products: string;
   address: string;
   clientName: string;
   clientNotes: string;
@@ -16,12 +17,14 @@ export interface OrderAttributes {
 
 export interface OrderCreationAttrs extends Optional<OrderAttributes, 'id' | 'createdAt' | 'updatedAt'> {
   total: number;
+  products: string;
   status: 'pending' | 'inProgress'| 'payed' | 'cancelled';
 }
 
 export class Order extends Model<OrderAttributes> implements OrderAttributes {
   public id!: number;
   public total!: number;
+  public products!: string;
   public address!: string;
   public clientName!: string;
   public clientNotes!: string;
@@ -44,6 +47,10 @@ Order.init(
       validate: {
         min: 0,
       },
+    },
+    products: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     address: {
       type: DataTypes.STRING,
@@ -86,10 +93,5 @@ Order.init(
     ],
   }
 );
-
-Order.hasMany(OrderProduct, {
-  foreignKey: 'orderId',
-  as: 'products',
-});
 
 export default Order;

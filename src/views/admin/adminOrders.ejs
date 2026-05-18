@@ -52,7 +52,7 @@
                 </td>
                 <td><%- order.createdAt %></td>
                 <td>
-                  <% order.products.forEach(productId => { %>
+                  <% order.products.split(",").forEach(productId => { %>
                     <span class="badge bg-secondary me-1">Producto <%= productId %></span>
                   <% }) %>
                 </td>
