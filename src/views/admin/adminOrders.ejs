@@ -128,7 +128,8 @@
       <!-- Ver más -->
       <div class="mt-4 text-center">
         <button class="btn btn-secondary" id="loadMore" onclick="loadMoreOrders()">
-          Ver más
+          <span id="loadMoreText"></span>Ver más</span>
+          <span class="spinner-border spinner-border-sm d-none" id="loadMoreSpinner"></span>
         </button>
       </div>
     <% } %>
@@ -147,8 +148,12 @@
 
     async function loadMoreOrders() {
       const loadMoreBtn = document.getElementById('loadMore');
+      const loadMoreText = document.getElementById('loadMoreText');
+      const loadMoreSpinner = document.getElementById('loadMoreSpinner');
+      
       loadMoreBtn.disabled = true;
-      loadMoreBtn.textContent = 'Cargando...';
+      loadMoreText.classList.add('d-none');
+      loadMoreSpinner.classList.remove('d-none');
 
       try {
         currentPage++;
@@ -196,7 +201,8 @@
         alert('Error al cargar más órdenes');
       } finally {
         loadMoreBtn.disabled = false;
-        loadMoreBtn.textContent = 'Ver más';
+        loadMoreText.classList.remove('d-none');
+        loadMoreSpinner.classList.add('d-none');
       }
     }
 
