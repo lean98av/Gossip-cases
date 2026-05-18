@@ -66,6 +66,11 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      deleted: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -119,7 +124,7 @@ module.exports = {
         autoIncrement: true,
       },
       products: {
-        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        type: Sequelize.STRING,
         allowNull: false,
       },
       total: {
@@ -127,7 +132,23 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('pending', 'confirmed', 'cancelled'),
+        type: Sequelize.ENUM('pending', 'inProgress', 'payed', 'cancelled'),
+        allowNull: false,
+      },
+      address: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      clientName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      clientNotes: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      clientPhone: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {
@@ -167,6 +188,11 @@ module.exports = {
         type: Sequelize.STRING(2097152),
         allowNull: false,
       },
+      order: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -180,10 +206,39 @@ module.exports = {
     });
 
     await queryInterface.addIndex('product_images', ['productId']);
+
+    await queryInterface.createTable('Settings', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      key: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      value: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
   },
 
   async down (queryInterface, Sequelize) {
     await queryInterface.dropTable('product_images');
+    await queryInterface.dropTable('Settings');
     await queryInterface.dropTable('orders');
     await queryInterface.dropTable('product_categories');
     await queryInterface.dropTable('products');
