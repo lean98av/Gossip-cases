@@ -11,6 +11,7 @@ export interface ProductAttributes {
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
+  deleted: boolean;
   order?: number;
   createdAt: Date;
   updatedAt: Date;
@@ -37,6 +38,7 @@ class Product extends Model<ProductAttributes, ProductCreationAttrs> {
   public categoryId!: number;
   public showToClients!: boolean;
   public outStock!: boolean;
+  public deleted!: boolean;
   public order?: number;
   public createdAt!: Date;
   public updatedAt!: Date;
@@ -84,6 +86,11 @@ Product.init(
       allowNull: false,
       defaultValue: false,
     },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -105,6 +112,9 @@ Product.init(
       },
       {
         fields: ['categoryId'],
+      },
+      {
+        fields: ['deleted'],
       },
     ],
   }

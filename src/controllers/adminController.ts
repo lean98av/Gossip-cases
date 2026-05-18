@@ -25,7 +25,6 @@ export default {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('que pasa con el auth:', req.body);
       const { pass } = req.body;
       const ADMIN_PASS = process.env.ADMIN_PASS || 'admin123';
 
@@ -179,6 +178,7 @@ export default {
         description,
         showToClients: showToClients === 'true',
         outStock: outStock === 'true',
+        deleted: false,
       };
 
       const product = await Product.create(productData);

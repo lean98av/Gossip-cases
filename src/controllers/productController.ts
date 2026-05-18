@@ -65,7 +65,7 @@ export default {
       if (!product) {
         return res.status(404).render('404');
       }
-
+//marca error pero funciona bien ni idea
       res.render('details', {
         product,
         category: product.category,
