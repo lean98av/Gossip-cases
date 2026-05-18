@@ -28,23 +28,43 @@
 
                 <div class="footer-socials">
 
-                    <a href="https://instagram.com" target="_blank" class="footer-icon">
+                    <% if (appSettings.instagram) { %>
+                        <a
+                            href="<%= appSettings.instagram %>"
+                            target="_blank"
+                            class="footer-icon">
 
-                        <i class="fab fa-instagram"></i>
+                            <i class="fab fa-instagram"></i>
 
-                    </a>
+                        </a>
 
-                    <a href="https://wa.me/5491111111111" target="_blank" class="footer-icon">
+                    <% } %>
 
-                        <i class="fab fa-whatsapp"></i>
+                    <% if (appSettings.whatsapp) { %>
 
-                    </a>
+                        <a
+                            href="https://wa.me/<%= appSettings.whatsapp %>"
+                            target="_blank"
+                            class="footer-icon">
 
-                    <a href="https://tiktok.com" target="_blank" class="footer-icon">
+                            <i class="fab fa-whatsapp"></i>
 
-                        <i class="fab fa-tiktok"></i>
+                        </a>
 
-                    </a>
+                    <% } %>
+
+                    <% if (appSettings.tiktok) { %>
+
+                        <a
+                            href="<%= appSettings.tiktok %>"
+                            target="_blank"
+                            class="footer-icon">
+
+                            <i class="fab fa-tiktok"></i>
+
+                        </a>
+
+                    <% } %>
 
                 </div>
 

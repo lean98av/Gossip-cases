@@ -4,6 +4,7 @@ import path from 'path';
 import { HomeController } from './controllers/homeController';
 import multer from 'multer';
 import session from 'express-session';
+import loadSettings from "./middleware/loadSettings";
 
 const app = express();
 
@@ -104,6 +105,7 @@ import productRoutes from './routes/productRoutes';
 import searchRoutes from './routes/searchRoutes';
 import cartRoutes from './routes/cartRoutes';
 import adminRoutes from './routes/adminRoutes';
+import settingsRoutes from "./routes/settingRoutes";
 
 app.use(
   session({
@@ -120,18 +122,20 @@ app.use((req, res, next) => {
 
 });
 
+app.use(loadSettings);
+
 // Public Routes
 app.use('/api/products', productRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/admin', adminRoutes);
+app.use("/admin/settings", settingsRoutes);
 
 // View Routes
 import homeRoutes from './routes/homeRoutes';
 app.use('/product', productRoutes);
 app.use('/cart', cartRoutes);
 app.use(homeRoutes);
-
 
 // Home Route
 app.get('/', HomeController.home);
