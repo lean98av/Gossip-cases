@@ -79,6 +79,59 @@
     }
   }
 
+  // Add delete buttons for each image
+  for (let i = 1; i <= 4; i++) {
+    const previewContainer = document.getElementById(`imagePreview${i}`);
+    const previewImg = document.getElementById(`imagePreviewImg${i}`);
+    if (previewContainer && previewImg) {
+      // Create delete button
+      const deleteBtn = document.createElement('button');
+      deleteBtn.type = 'button';
+      deleteBtn.className = 'btn btn-sm btn-danger';
+      deleteBtn.textContent = 'Eliminar';
+      deleteBtn.title = `Eliminar imagen ${i}`;
+      
+      deleteBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const productId = product ? product.id : null;
+        if (!productId) {
+          alert('No se puede eliminar imagen en modo creación.');
+          return;
+        }
+        
+        try {
+          const response = await fetch(`/admin/products/${productId}/deleteImage`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ order: i }),
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            // Update preview
+            previewImg.src = '';
+            previewContainer.style.display = 'none';
+            // Clear the file input
+            document.getElementById(`image${i}`).value = '';
+          } else {
+            alert('Error al eliminar la imagen: ' + (result.message || ''));
+          }
+        } catch (err) {
+          console.error('Error al eliminar imagen:', err);
+          alert('Ocurrió un error al eliminar la imagen. Revisa la consola para más detalles.');
+        }
+      });
+      
+      // Append button to preview container
+      previewContainer.appendChild(deleteBtn);
+    }
+  }
+
    const form = document.getElementById('productForm');
   if (!form) {
     return;

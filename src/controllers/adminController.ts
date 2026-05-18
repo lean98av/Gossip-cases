@@ -303,4 +303,33 @@ async editProduct(req: Request, res: Response, next: NextFunction) {
       next(error);
     }
   },
+
+  async deleteImage(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const { order } = req.body;
+
+      if (!id || !order) {
+        return res.status(400).json({ success: false, message: 'Faltan parámetros requeridos' });
+      }
+
+      const productId = parseInt(id);
+      const orderNum = parseInt(order);
+
+      if (orderNum < 1 || orderNum > 4) {
+        return res.status(400).json({ success: false, message: 'El orden de la imagen debe estar entre 1 y 4' });
+      }
+
+      const product = await Product.findByPk(id);
+      if (!product) {
+        return res.status(404).json({ success: false, message: 'Producto no encontrado' });
+      }
+
+      await ProductImage.destroy({ where: { productId, order: orderNum } });
+
+      res.json({ success: true, message: 'Imagen eliminada correctamente' });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
