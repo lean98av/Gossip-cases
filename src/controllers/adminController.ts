@@ -305,10 +305,6 @@ async editProduct(req: Request, res: Response, next: NextFunction) {
     }
   },
 
-
-
-
-  
   async deleteProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
@@ -324,8 +320,10 @@ async editProduct(req: Request, res: Response, next: NextFunction) {
         where: { productId: id },
       });
 
-      // Delete product
-      await product.destroy();
+      // Soft delete - mark as deleted instead of destroying
+      await product.update({
+        deleted: true,
+      });
 
       res.json({ success: true, message: 'Producto eliminado correctamente' });
     } catch (error) {
