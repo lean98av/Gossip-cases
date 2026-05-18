@@ -44,7 +44,7 @@
             <% orders.forEach(order => { %>
               <tr>
                 <td><%= order.id %></td>
-                <td class="fw-bold">$<%= order.total.toFixed(2) %></td>
+                <td class="fw-bold">$<%= order.total %></td>
                 <td>
                   <span class="badge <%= order.status === 'pending' ? 'bg-warning' : order.status === 'confirmed' ? 'bg-success' : 'bg-danger' %>">
                     <%= order.status %>

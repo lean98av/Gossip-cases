@@ -118,7 +118,7 @@ export default {
   async adminOrders(req: Request, res: Response, next: NextFunction) {
     try {
       const orders = await Order.findAll({
-        include: [{ model: Product, as: 'products' }],
+        attributes: ['id', 'products', 'total', 'status', 'createdAt'],
         order: [['createdAt', 'DESC']],
       });
 
