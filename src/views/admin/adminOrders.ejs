@@ -22,44 +22,39 @@
         ← Volver al Inicio
       </a>
     </div>
-  </div>
 
     <% if (orders.length === 0) { %>
       <div class="alert alert-info">
         No se encontraron ordenes.
       </div>
     <% } else { %>
-      <div class="table-responsive">
-        <table class="table table-hover">
-          <thead class="table-dark">
-            <tr>
-              <th>ID</th>
-              <th>Total</th>
-              <th>Estado</th>
-              <th>Fecha de Creación</th>
-              <th>Productos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% orders.forEach(order => { %>
-              <tr>
-                <td><%= order.id %></td>
-                <td class="fw-bold">$<%= order.total %></td>
-                <td>
+      <div class="row">
+        <% orders.forEach(order => { %>
+          <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">Orden #<%= order.id %></h5>
+                <p class="card-text mb-1"><strong>Cliente:</strong> <%= order.clientName %></p>
+                <p class="card-text mb-1">
+                  <strong>Estado:</strong>
                   <span class="badge <%= order.status === 'pending' ? 'bg-warning' : order.status === 'confirmed' ? 'bg-success' : 'bg-danger' %>">
                     <%= order.status %>
                   </span>
-                </td>
-                <td><%- order.createdAt %></td>
-                <td>
+                </p>
+                <p class="card-text mb-1"><strong>Total:</strong> $<%= order.total %></p>
+                <p class="card-text mb-1">
+                  <strong>Fecha:</strong> 
+                  <%= new Date(order.createdAt).toLocaleString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) %>
+                </p>
+                <div class="mt-2">
                   <% order.products.split(",").forEach(productId => { %>
                     <span class="badge bg-secondary me-1">Producto <%= productId %></span>
                   <% }) %>
-                </td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
       </div>
     <% } %>
   </div>
