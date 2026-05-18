@@ -115,10 +115,24 @@ export default {
 
   async adminOrders(req: Request, res: Response, next: NextFunction) {
     try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = 10;
+      const offset = (page - 1) * limit;
+      const statusFilter = req.query.status as string || 'all';
+
+      let whereClause: any = {};
+      if (statusFilter !== 'all') {
+        whereClause.status = statusFilter;
+      }
+
+      const totalOrders = await Order.count({ where: whereClause });
+      const totalPages = Math.ceil(totalOrders / limit);
+
       const orders = await Order.findAll({
+        where: whereClause,
         order: [['createdAt', 'DESC']],
-        limit: 10,
-        offset: 0,
+        limit,
+        offset,
       });
 
       const allProducts = await Product.findAll();
@@ -155,6 +169,9 @@ export default {
       res.render('admin/adminOrders', {
         title: 'Admin - Ordenes',
         orders: enrichedOrders,
+        statusFilter,
+        currentPage: page,
+        totalPages: totalPages,
         adminAuth: req.adminAuth,
       });
     } catch (error) {
@@ -388,12 +405,18 @@ async editProduct(req: Request, res: Response, next: NextFunction) {
       const page = parseInt(req.query.page as string) || 1;
       const limit = 10;
       const offset = (page - 1) * limit;
+      const statusFilter = req.query.status as string || 'all';
 
-      const totalOrders = await Order.count();
+      let whereClause: any = {};
+      if (statusFilter !== 'all') {
+        whereClause.status = statusFilter;
+      }
+
+      const totalOrders = await Order.count({ where: whereClause });
       const totalPages = Math.ceil(totalOrders / limit);
 
       const orders = await Order.findAll({
-        where: {},
+        where: whereClause,
         limit,
         offset,
         order: [['createdAt', 'DESC']],
