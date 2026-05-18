@@ -65,7 +65,17 @@
 
                                 <div class="card product-card">
                                    <% if (product.images && product.images.length > 0) { %>
-                                    <img src="data:<%= getImageMimeType(product.images[3].name) %>;base64,<%= product.images[3].file %>"
+                                    <% 
+                                        // Buscar imagen con name="1" o si no existe, tomar la primera
+                                        let displayImage = null;
+                                        const imageWithOrder1 = product.images.find(img => img.name === '1');
+                                        if (imageWithOrder1) {
+                                            displayImage = imageWithOrder1;
+                                        } else {
+                                            displayImage = product.images[0];
+                                        }
+                                    %>
+                                    <img src="data:<%= getImageMimeType(displayImage.name) %>;base64,<%= displayImage.file %>"
                                         class="card-img-top product-img" alt="<%= product.name %>">
                                     <% } %>
 
