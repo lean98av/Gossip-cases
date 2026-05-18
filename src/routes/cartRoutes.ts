@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import Product from '../models/product';
+import { Category, ProductImage } from '../models';
 
 const router = Router();
 
@@ -30,7 +31,16 @@ router.get('/', async (req: any, res) => {
 
 router.post('/add/:id', async (req: any, res) => {
 
-  const product = await Product.findByPk(req.params.id);
+  const product = await Product.findByPk(req.params.id, {
+        include: [
+          { model: Category, as: 'category' },
+          { model: ProductImage, as: 'images', order: [['order', 'ASC']] },
+        ],
+      })
+
+        const productImage = await ProductImage.findOne({
+          where: { productId: product?.id, order: 1 },
+        })
 
   if (!product) {
     return res.redirect('/');
@@ -49,11 +59,11 @@ router.post('/add/:id', async (req: any, res) => {
     existing.quantity++;
 
   } else {
-
     req.session.cart.push({
       id: product.id,
       name: product.name,
       price: product.price,
+      image: productImage ,
       quantity: 1
     });
 
