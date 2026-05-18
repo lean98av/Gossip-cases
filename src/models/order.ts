@@ -1,27 +1,31 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/db';
 import Product from './product';
+import OrderProduct from './orderProduct';
 
 export interface OrderAttributes {
   id: number;
-  products: number[];
   total: number;
-  status: 'pending' | 'confirmed' | 'cancelled';
+  address: string;
+  clientName: string;
+  clientNotes: string;
+  status: 'pending' | 'inProgress'| 'payed' | 'cancelled';
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface OrderCreationAttrs extends Optional<OrderAttributes, 'id' | 'createdAt' | 'updatedAt'> {
-  products: number[];
   total: number;
-  status: 'pending' | 'confirmed' | 'cancelled';
+  status: 'pending' | 'inProgress'| 'payed' | 'cancelled';
 }
 
 export class Order extends Model<OrderAttributes> implements OrderAttributes {
   public id!: number;
-  public products!: number[];
   public total!: number;
-  public status!: 'pending' | 'confirmed' | 'cancelled';
+  public address!: string;
+  public clientName!: string;
+  public clientNotes!: string;
+  public status!: 'pending' | 'inProgress'| 'payed' | 'cancelled';
   public createdAt!: Date;
   public updatedAt!: Date;
 }
@@ -34,10 +38,6 @@ Order.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    products: {
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
-      allowNull: false,
-    },
     total: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
@@ -45,8 +45,20 @@ Order.init(
         min: 0,
       },
     },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    clientName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    clientNotes: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     status: {
-      type: DataTypes.ENUM('pending', 'confirmed', 'cancelled'),
+      type: DataTypes.ENUM('pending', 'inProgress', 'payed', 'cancelled'),
       allowNull: false,
     },
     createdAt: {
@@ -74,5 +86,10 @@ Order.init(
     ],
   }
 );
+
+Order.hasMany(OrderProduct, {
+  foreignKey: 'orderId',
+  as: 'products',
+});
 
 export default Order;
