@@ -30,58 +30,30 @@
             <main class="container mb-5 mt-5">
 
                 <div class="row g-4">
-
-                    <!-- IMAGEN
                     <div class="col-lg-6">
-
                         <div class="card border-0 shadow-sm">
-
                             <% if (product.images && product.images.length> 0) { %>
-                                <img id="detailImage"
+                                <!-- Imagen principal -->
+                                <img id="mainImage"
                                     src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>"
-                                    alt="<%= product.name %>" class="card-img-top product-img">
+                                    alt="<%= product.name %>" class="card-img-top product-img mb-3"
+                                    style="max-height:400px; object-fit:contain;">
+
+                                <!-- Miniaturas -->
+                                <div class="d-flex justify-content-center gap-2 flex-wrap pb-3">
+                                    <% product.images.forEach((img, idx)=> { %>
+                                        <img src="data:<%= getImageMimeType(img.name) %>;base64,<%= img.file %>"
+                                            alt="<%= product.name %> <%= idx+1 %>" class="img-thumbnail"
+                                            style="width:80px; height:80px; object-fit:cover; cursor:pointer;"
+                                            onclick="document.getElementById('mainImage').src=this.src">
+                                        <% }) %>
+                                </div>
                                 <% } else { %>
-                                    <img id="detailImage" src="/images/no-image.png" alt="<%= product.name %>"
+                                    <img id="mainImage" src="/images/no-image.png" alt="<%= product.name %>"
                                         class="card-img-top product-img">
                                     <% } %>
-
                         </div>
-
-                    </div> -->
-                    <div class="col-lg-6">
-  <div class="card border-0 shadow-sm">
-    <% if (product.images && product.images.length > 0) { %>
-      <!-- Imagen principal -->
-      <img
-        id="mainImage"
-        src="data:<%= getImageMimeType(product.images[0].name) %>;base64,<%= product.images[0].file %>"
-        alt="<%= product.name %>"
-        class="card-img-top product-img mb-3"
-        style="max-height:400px; object-fit:contain;"
-      >
-
-      <!-- Miniaturas -->
-      <div class="d-flex gap-2">
-        <% product.images.forEach((img, idx) => { %>
-          <img
-            src="data:<%= getImageMimeType(img.name) %>;base64,<%= img.file %>"
-            alt="<%= product.name %> <%= idx+1 %>"
-            class="img-thumbnail"
-            style="width:80px; height:80px; object-fit:cover; cursor:pointer;"
-            onclick="document.getElementById('mainImage').src=this.src"
-          >
-        <% }) %>
-      </div>
-    <% } else { %>
-      <img
-        id="mainImage"
-        src="/images/no-image.png"
-        alt="<%= product.name %>"
-        class="card-img-top product-img"
-      >
-    <% } %>
-  </div>
-</div>
+                    </div>
 
 
                     <!-- INFO -->
@@ -105,19 +77,24 @@
 
                                 </div>
 
-                                <!-- DESCRIPCION -->
-                                <p id="detailDescription" class="text-muted mb-4">
-
-                                    <%= product.description || 'Sin descripción disponible.' %>
-
-                                </p>
-
                                 <!-- INFO -->
                                 <div class="modal-specs mb-4">
 
                                     <h6>
                                         Información del Producto
                                     </h6>
+
+                                    <p class="mb-2">
+
+                                        <strong>Descripción:</strong>
+
+                                        <span id="detailDescription">
+
+                                            <%= product.description || 'Sin descripción disponible.' %>
+
+                                        </span>
+
+                                    </p>
 
                                     <p class="mb-2">
 
@@ -154,25 +131,28 @@
                                 </div>
 
                                 <!-- BOTONES -->
-                                <button class="btn btn-primary w-100 mb-3">
 
-                                    <i class="fas fa-shopping-bag"></i>
-
-                                    Comprar Ahora
-
-                                </button>
-
+                                <!-- Comprar ahora -->
                                 <form action="/cart/add/<%= product.id %>" method="POST">
 
-                                    <button class="btn btn-outline-primary w-100">
+                                    <button type="submit" class="btn btn-primary w-100 mb-3">
 
-                                        <i class="fas fa-cart-plus"></i>
+                                        <i class="fas fa-shopping-bag"></i>
 
-                                        Agregar al Carrito
+                                        Comprar Ahora
 
                                     </button>
 
                                 </form>
+
+                                <!-- Agregar sin redirigir -->
+                                <button id="addToCartBtn" class="btn btn-outline-primary w-100">
+
+                                    <i class="fas fa-cart-plus"></i>
+
+                                    Agregar al Carrito
+
+                                </button>
 
                             </div>
 
