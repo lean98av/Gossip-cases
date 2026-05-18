@@ -361,4 +361,25 @@ async editProduct(req: Request, res: Response, next: NextFunction) {
       next(error);
     }
   },
+
+  async updateOrder(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id, status } = req.body;
+
+      if (!id || !status) {
+        return res.status(400).json({ success: false, message: 'Faltan parámetros requeridos: id y status' });
+      }
+
+      const order = await Order.findByPk(parseInt(id));
+      if (!order) {
+        return res.status(404).json({ success: false, message: 'Orden no encontrada' });
+      }
+
+      await order.update({ status });
+
+      res.json({ success: true, message: 'Orden actualizada correctamente', data: order });
+    } catch (error) {
+      next(error);
+    }
+  },
 };

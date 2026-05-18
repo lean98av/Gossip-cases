@@ -120,6 +120,16 @@
                       <%= order.status %>
                     </span>
                   </p>
+                  <div class="mt-3">
+                  <label for="statusSelect-<%= order.id %>" class="form-label">Cambiar estado:</label>
+                  <select id="statusSelect-<%= order.id %>" class="form-select"
+                          onchange="updateOrderStatus(<%= order.id %>, this.value)">
+                    <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                    <option value="inProgress" <%= order.status === 'inProgress' ? 'selected' : '' %>>In Progress</option>
+                    <option value="payed" <%= order.status === 'payed' ? 'selected' : '' %>>Payed</option>
+                    <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                  </select>
+                </div>
                   <p><strong>Fecha de creación:</strong> 
                     <%= new Date(order.createdAt).toLocaleString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) %>
                   </p>
@@ -134,6 +144,7 @@
                     <% }) %>
                   </ul>
                 </div>
+                
 
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -197,6 +208,43 @@
 
 
   }
+
+  async function updateOrderStatus(orderId, newStatus) {
+  try {
+    const response = await fetch('/adminController/updateOrder', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: orderId, status: newStatus })
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al actualizar el estado');
+    }
+
+    const result = await response.json();
+    console.log('Orden actualizada:', result);
+
+    // Opcional: refrescar badge en la card y modal
+    const badgeElements = document.querySelectorAll(
+      `[data-id="${orderId}"] .badge, #orderModal-${orderId} .badge`
+    );
+    badgeElements.forEach(badge => {
+      badge.textContent = newStatus;
+      badge.className = 'badge ' + (
+        newStatus === 'pending' ? 'bg-warning' :
+        newStatus === 'inProgress' ? 'bg-info' :
+        newStatus === 'payed' ? 'bg-success' : 'bg-danger'
+      );
+    });
+
+  } catch (error) {
+    console.error(error);
+    alert('No se pudo actualizar el estado');
+  }
+}
+
 
   // Eventos
   sortSelect.addEventListener('change', applyFilters);
