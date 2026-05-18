@@ -117,7 +117,7 @@ export default {
     try {
       const orders = await Order.findAll({
         order: [['createdAt', 'DESC']],
-        limit: 2,
+        limit: 10,
         offset: 0,
       });
 
@@ -386,7 +386,7 @@ async editProduct(req: Request, res: Response, next: NextFunction) {
   async loadMoreOrders(req: Request, res: Response, next: NextFunction) {
     try {
       const page = parseInt(req.query.page as string) || 1;
-      const limit = 2;
+      const limit = 10;
       const offset = (page - 1) * limit;
 
       const totalOrders = await Order.count();
