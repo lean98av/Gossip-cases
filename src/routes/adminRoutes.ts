@@ -76,6 +76,10 @@ router.put(
   }
 );
 
+router.delete('/products/:id/deleteImage', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+  await adminController.deleteImage(req, res, next);
+});
+
 router.delete('/products/:id', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   await adminController.deleteProduct(req, res, next);
 });

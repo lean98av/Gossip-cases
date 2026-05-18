@@ -11,6 +11,7 @@ export interface ProductAttributes {
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
+  order?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -22,6 +23,7 @@ export interface ProductCreationAttrs extends Optional<ProductAttributes, 'id' |
   categoryId: number;
   showToClients: boolean;
   outStock: boolean;
+  order?: number;
   id?: undefined;
   createdAt?: undefined;
   updatedAt?: undefined;
@@ -35,17 +37,9 @@ class Product extends Model<ProductAttributes, ProductCreationAttrs> {
   public categoryId!: number;
   public showToClients!: boolean;
   public outStock!: boolean;
+  public order?: number;
   public createdAt!: Date;
   public updatedAt!: Date;
-
-  public get category(): Category | null {
-    const val = this.getDataValue('categoryId') as number;
-    return val ? (Category as any).findByPk(val, { raw: true }) : null;
-  }
-
-  public set category(value: Category | null) {
-    this.setDataValue('categoryId', value?.id || 0);
-  }
 }
 
 Product.init(

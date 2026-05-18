@@ -35,33 +35,104 @@
     document.getElementById('showToClients').checked = Boolean(product.showToClients);
     document.getElementById('outStock').checked = Boolean(product.outStock);
 
-    if (product.images && product.images.length > 0) {
-      document.getElementById('productImage').value = '';
-      if (product.images[0].file) {
-        document.getElementById('imagePreviewImg').src = getImageDataUrl(product.images[0].file, product.images[0].name);
-        document.getElementById('imagePreview').style.display = 'block';
+    // Set existing images with their order numbers
+    for (let i = 1; i <= 4; i++) {
+      const imgInput = document.getElementById(`image${i}`);
+      const previewContainer = document.getElementById(`imagePreview${i}`);
+      const previewImg = document.getElementById(`imagePreviewImg${i}`);
+      const imageName = `${i}`;
+
+      if (imgInput && product.images) {
+        // Buscar la imagen que tiene el mismo nombre que el input
+        const matchingImage = product.images.find(img => img.name === imageName);
+        
+        if (matchingImage && matchingImage.file) {
+          imgInput.value = ''; // Clear the file input
+          previewImg.src = getImageDataUrl(matchingImage.file, matchingImage.name);
+          previewContainer.style.display = 'block';
+        } else {
+          previewContainer.style.display = 'none';
+        }
+      } else {
+        previewContainer.style.display = 'none';
       }
     }
   }
 
-  const productImageInput = document.getElementById('productImage');
-  if (productImageInput) {
-    productImageInput.addEventListener('change', function (e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          const preview = document.getElementById('imagePreview');
-          const img = document.getElementById('imagePreviewImg');
-          preview.style.display = 'block';
-          img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+  // Add event listeners for all 4 image inputs
+  for (let i = 1; i <= 4; i++) {
+    const imgInput = document.getElementById(`image${i}`);
+    if (imgInput) {
+      imgInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const previewContainer = document.getElementById(`imagePreview${i}`);
+            const previewImg = document.getElementById(`imagePreviewImg${i}`);
+            previewContainer.style.display = 'block';
+            previewImg.src = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
   }
 
-  const form = document.getElementById('productForm');
+  // Add delete buttons for each image
+  for (let i = 1; i <= 4; i++) {
+    const previewContainer = document.getElementById(`imagePreview${i}`);
+    const previewImg = document.getElementById(`imagePreviewImg${i}`);
+    if (previewContainer && previewImg) {
+      // Create delete button
+      const deleteBtn = document.createElement('button');
+      deleteBtn.type = 'button';
+      deleteBtn.className = 'btn btn-sm btn-danger';
+      deleteBtn.textContent = 'Eliminar';
+      deleteBtn.title = `Eliminar imagen ${i}`;
+      
+      deleteBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const productId = product ? product.id : null;
+        if (!productId) {
+          alert('No se puede eliminar imagen en modo creación.');
+          return;
+        }
+        
+        try {
+          const response = await fetch(`/admin/products/${productId}/deleteImage`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ order: i }),
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            // Update preview
+            previewImg.src = '';
+            previewContainer.style.display = 'none';
+            // Clear the file input
+            document.getElementById(`image${i}`).value = '';
+          } else {
+            alert('Error al eliminar la imagen: ' + (result.message || ''));
+          }
+        } catch (err) {
+          console.error('Error al eliminar imagen:', err);
+          alert('Ocurrió un error al eliminar la imagen. Revisa la consola para más detalles.');
+        }
+      });
+      
+      // Append button to preview container
+      previewContainer.appendChild(deleteBtn);
+    }
+  }
+
+   const form = document.getElementById('productForm');
   if (!form) {
     return;
   }
@@ -75,7 +146,6 @@
     const descriptionInput = document.getElementById('productDescription');
     const showToClientsInput = document.getElementById('showToClients');
     const outStockInput = document.getElementById('outStock');
-    const imageInput = document.getElementById('productImage');
     const deleteImagesInput = document.getElementById('deleteImages');
 
     const name = nameInput.value.trim();
@@ -84,7 +154,6 @@
     const description = descriptionInput.value.trim();
     const showToClients = showToClientsInput.checked;
     const outStock = outStockInput.checked;
-    const imageFile = imageInput.files[0];
 
     nameInput.classList.remove('is-invalid');
     priceInput.classList.remove('is-invalid');
@@ -111,23 +180,6 @@
       return;
     }
 
-    if (imageFile) {
-      if (imageFile.size > 2 * 1024 * 1024) {
-        alert('La imagen no puede ser mayor a 2MB');
-        return;
-      }
-      const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-      if (!validTypes.includes(imageFile.type)) {
-        alert('Solo se permiten imágenes JPG, PNG, GIF y WebP');
-        return;
-      }
-    }
-
-    const deleteIds = deleteImagesInput.value
-      .split(',')
-      .map(id => id.trim())
-      .filter(Boolean);
-
     const isEdit = Boolean(product && product.id);
     const requestUrl = isEdit ? `/admin/products/${product.id}` : '/admin/products';
     const requestMethod = isEdit ? 'PUT' : 'POST';
@@ -141,19 +193,37 @@
       formData.append('showToClients', String(showToClients));
       formData.append('outStock', String(outStock));
 
-      if (imageFile) {
-        formData.append('images', imageFile);
+      // Imagen 1
+    // Imagen 1
+      const img1 = document.getElementById('image1');
+      if (img1 && img1.files.length > 0) {
+        const file = img1.files[0];
+        const renamedFile = new File([file], "1", { type: file.type });
+        formData.append('images', renamedFile);
       }
 
-      const additionalFiles = document.getElementById('productImages').files;
-      if (additionalFiles && additionalFiles.length) {
-        for (const file of additionalFiles) {
-          formData.append('images', file);
-        }
+      // Imagen 2
+      const img2 = document.getElementById('image2');
+      if (img2 && img2.files.length > 0) {
+        const file = img2.files[0];
+        const renamedFile = new File([file], "2", { type: file.type });
+        formData.append('images', renamedFile);
       }
 
-      if (deleteIds.length) {
-        formData.append('deleteImages', JSON.stringify(deleteIds));
+      // Imagen 3
+      const img3 = document.getElementById('image3');
+      if (img3 && img3.files.length > 0) {
+        const file = img3.files[0];
+        const renamedFile = new File([file], "3", { type: file.type });
+        formData.append('images', renamedFile);
+      }
+
+      // Imagen 4
+      const img4 = document.getElementById('image4');
+      if (img4 && img4.files.length > 0) {
+        const file = img4.files[0];
+        const renamedFile = new File([file], "4", { type: file.type });
+        formData.append('images', renamedFile);
       }
 
       const response = await fetch(requestUrl, {
