@@ -11,6 +11,7 @@ export default {
 
       const products = await Product.findAndCountAll({
         where: {
+          deleted: false,
           ...(showToClients === 'false' && { showToClients: false }),
         },
         include: [
@@ -33,7 +34,8 @@ export default {
   async getProductById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const product = await Product.findByPk(id, {
+      const product = await Product.findOne({
+        where: { id, deleted: false },
         include: [
           { model: Category, as: 'category' },
           { model: ProductImage, as: 'images' },
@@ -55,7 +57,8 @@ export default {
 
     try {
 
-      const product = await Product.findByPk(req.params.id, {
+      const product = await Product.findOne({
+        where: { id: req.params.id, deleted: false },
         include: [
           { model: Category, as: 'category' },
           { model: ProductImage, as: 'images' },

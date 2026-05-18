@@ -12,6 +12,7 @@ router.get('/', async (req: { query: { q?: string } }, res: Response) => {
     const products = await Product.findAll({
       where: {
         showToClients: true,
+        deleted: false,
         ...(search && {
           [Op.or]: [
             { name: { [Op.iLike]: `%${search}%` } },

@@ -31,7 +31,8 @@ router.get('/', async (req: any, res) => {
 
 router.post('/add/:id', async (req: any, res) => {
 
-  const product = await Product.findByPk(req.params.id, {
+  const product = await Product.findOne({
+        where: { id: req.params.id, deleted: false },
         include: [
           { model: Category, as: 'category' },
           { model: ProductImage, as: 'images', order: [['order', 'ASC']] },

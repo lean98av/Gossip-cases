@@ -18,6 +18,7 @@ export default {
         where: {
           categoryId: 1,
           showToClients: true,
+          deleted: false,
         },
         order: [['createdAt', 'DESC']],
       });
@@ -50,6 +51,7 @@ export default {
         where: {
           categoryId: 2,
           showToClients: true,
+          deleted: false,
         },
         order: [['createdAt', 'DESC']],
       });
@@ -79,6 +81,7 @@ export default {
         where: {
           categoryId: 3,
           showToClients: true,
+          deleted: false,
         },
         order: [['createdAt', 'DESC']],
       });
@@ -108,6 +111,7 @@ export default {
         where: {
           categoryId: 4,
           showToClients: true,
+          deleted: false,
         },
         order: [['createdAt', 'DESC']],
       });
@@ -133,6 +137,7 @@ export default {
         where: {
           showToClients: true,
           outStock: false,
+          deleted: false,
         },
         order: [['createdAt', 'DESC']],
       });
