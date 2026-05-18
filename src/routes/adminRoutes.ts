@@ -88,6 +88,10 @@ router.get('/orders', authMiddleware, async (req: Request, res: Response, next: 
   await adminController.adminOrders(req, res, next);
 });
 
+router.get('/orders/loadMore', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+  await adminController.loadMoreOrders(req, res, next);
+});
+
 router.post('/orders/:id/update', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   await adminController.updateOrder(req, res, next);
 });

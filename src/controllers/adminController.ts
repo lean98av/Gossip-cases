@@ -117,6 +117,8 @@ export default {
     try {
       const orders = await Order.findAll({
         order: [['createdAt', 'DESC']],
+        limit: 2,
+        offset: 0,
       });
 
       const allProducts = await Product.findAll();
@@ -376,6 +378,63 @@ async editProduct(req: Request, res: Response, next: NextFunction) {
       await order.update({ status });
 
       res.json({ success: true, message: 'Orden actualizada correctamente', data: order });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async loadMoreOrders(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = 2;
+      const offset = (page - 1) * limit;
+
+      const totalOrders = await Order.count();
+      const totalPages = Math.ceil(totalOrders / limit);
+
+      const orders = await Order.findAll({
+        where: {},
+        limit,
+        offset,
+        order: [['createdAt', 'DESC']],
+      });
+
+      const allProducts = await Product.findAll();
+      const productsMap = new Map(allProducts.map((p) => [p.id, p]));
+
+      const enrichedOrders = orders.map((order) => {
+        const productIds = order.products.split(',');
+        const orderProducts = productIds
+          .map((id) => {
+            const product = productsMap.get(parseInt(id));
+            return product
+              ? {
+                  productId: product.id,
+                  productName: product.name,
+                  productPrice: product.price,
+                }
+              : null;
+          })
+          .filter((p) => p !== null);
+
+        return {
+          id: order.id,
+          total: order.total,
+          products: orderProducts,
+          address: order.address,
+          clientName: order.clientName,
+          clientNotes: order.clientNotes,
+          clientPhone: order.clientPhone,
+          status: order.status,
+          createdAt: order.createdAt,
+        };
+      });
+
+      res.json({
+        orders: enrichedOrders,
+        currentPage: page,
+        totalPages: totalPages,
+      });
     } catch (error) {
       next(error);
     }
