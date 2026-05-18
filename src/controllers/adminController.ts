@@ -118,13 +118,43 @@ export default {
   async adminOrders(req: Request, res: Response, next: NextFunction) {
     try {
       const orders = await Order.findAll({
-        attributes: ['id', 'products', 'total', 'status', 'createdAt'],
         order: [['createdAt', 'DESC']],
       });
 
+      const allProducts = await Product.findAll();
+      const productsMap = new Map(allProducts.map((p) => [p.id, p]));
+
+      const enrichedOrders = orders.map((order) => {
+        const productIds = order.products.split(',');
+        const orderProducts = productIds
+          .map((id) => {
+            const product = productsMap.get(parseInt(id));
+            return product
+              ? {
+                  productId: product.id,
+                  productName: product.name,
+                  productPrice: product.price,
+                }
+              : null;
+          })
+          .filter((p) => p !== null);
+
+        return {
+          id: order.id,
+          total: order.total,
+          products: orderProducts,
+          address: order.address,
+          clientName: order.clientName,
+          clientNotes: order.clientNotes,
+          status: order.status,
+          createdAt: order.createdAt,
+        };
+      });
+
+      console.log(enrichedOrders)
       res.render('admin/adminOrders', {
         title: 'Admin - Ordenes',
-        orders,
+        orders: enrichedOrders,
         adminAuth: req.adminAuth,
       });
     } catch (error) {

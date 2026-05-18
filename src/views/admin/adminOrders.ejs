@@ -23,21 +23,59 @@
       </a>
     </div>
 
+    <!-- Controles de ordenamiento y filtro -->
+    <div class="mb-4 d-flex flex-wrap align-items-center gap-3">
+      <div>
+        <label for="orderSort" class="form-label mb-0">Ordenar por:</label>
+        <select id="orderSort" class="form-select w-auto d-inline-block">
+          <option value="id">Número de Orden</option>
+          <option value="total">Precio Total</option>
+          <option value="date">Fecha</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="orderDirection" class="form-label mb-0">Dirección:</label>
+        <select id="orderDirection" class="form-select w-auto d-inline-block">
+          <option value="asc">Ascendente</option>
+          <option value="desc">Descendente</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="orderStatus" class="form-label mb-0">Estado:</label>
+        <select id="orderStatus" class="form-select w-auto d-inline-block">
+          <option value="all">Todos</option>
+          <option value="pending">Pending</option>
+          <option value="inProgress">In Progress</option>
+          <option value="payed">Payed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+    </div>
+
     <% if (orders.length === 0) { %>
       <div class="alert alert-info">
         No se encontraron ordenes.
       </div>
     <% } else { %>
-      <div class="row">
+      <div class="row" id="ordersContainer">
         <% orders.forEach(order => { %>
-          <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
+          <div class="col-md-4 mb-4 order-card" 
+               data-id="<%= order.id %>" 
+               data-total="<%= order.total %>" 
+               data-date="<%= new Date(order.createdAt).getTime() %>"
+               data-status="<%= order.status %>">
+            <div class="card shadow-sm h-100" role="button" data-bs-toggle="modal" data-bs-target="#orderModal-<%= order.id %>">
               <div class="card-body">
                 <h5 class="card-title">Orden #<%= order.id %></h5>
                 <p class="card-text mb-1"><strong>Cliente:</strong> <%= order.clientName %></p>
                 <p class="card-text mb-1">
                   <strong>Estado:</strong>
-                  <span class="badge <%= order.status === 'pending' ? 'bg-warning' : order.status === 'confirmed' ? 'bg-success' : 'bg-danger' %>">
+                  <span class="badge 
+                    <%= order.status === 'pending' ? 'bg-warning' : 
+                        order.status === 'inProgress' ? 'bg-info' : 
+                        order.status === 'payed' ? 'bg-success' : 'bg-danger' %>">
                     <%= order.status %>
                   </span>
                 </p>
@@ -46,14 +84,63 @@
                   <strong>Fecha:</strong> 
                   <%= new Date(order.createdAt).toLocaleString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) %>
                 </p>
-                <div class="mt-2">
-                  <% order.products.split(",").forEach(productId => { %>
-                    <span class="badge bg-secondary me-1">Producto <%= productId %></span>
-                  <% }) %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal -->
+          <div class="modal fade" id="orderModal-<%= order.id %>" tabindex="-1" aria-labelledby="orderModalLabel-<%= order.id %>" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+              <div class="modal-content 
+                <%= order.status === 'pending' ? 'border-warning' : 
+                    order.status === 'inProgress' ? 'border-info' : 
+                    order.status === 'payed' ? 'border-success' : 'border-danger' %>">
+                
+                <div class="modal-header 
+                  <%= order.status === 'pending' ? 'bg-warning text-dark' : 
+                      order.status === 'inProgress' ? 'bg-info text-dark' : 
+                      order.status === 'payed' ? 'bg-success text-white' : 'bg-danger text-white' %>">
+                  <h5 class="modal-title" id="orderModalLabel-<%= order.id %>">
+                    Detalles de Orden #<%= order.id %>
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+                  <p><strong>Cliente:</strong> <%= order.clientName %></p>
+                  <p><strong>Dirección:</strong> <%= order.address %></p>
+                  <p><strong>Notas del Cliente:</strong> <%= order.clientNotes %></p>
+                  <p><strong>Total:</strong> $<%= order.total %></p>
+                  <p><strong>Estado:</strong> 
+                    <span class="badge 
+                      <%= order.status === 'pending' ? 'bg-warning' : 
+                          order.status === 'inProgress' ? 'bg-info' : 
+                          order.status === 'payed' ? 'bg-success' : 'bg-danger' %>">
+                      <%= order.status %>
+                    </span>
+                  </p>
+                  <p><strong>Fecha de creación:</strong> 
+                    <%= new Date(order.createdAt).toLocaleString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) %>
+                  </p>
+                  <hr>
+                  <h6>Productos:</h6>
+                  <ul class="list-group">
+                    <% order.products.forEach(p => { %>
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><strong><%= p.productName %></strong> (ID: <%= p.productId %>)</span>
+                        <span>$<%= p.productPrice %></span>
+                      </li>
+                    <% }) %>
+                  </ul>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
               </div>
             </div>
           </div>
+
         <% }) %>
       </div>
     <% } %>
@@ -67,5 +154,56 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const sortSelect = document.getElementById('orderSort');
+    const directionSelect = document.getElementById('orderDirection');
+    const statusSelect = document.getElementById('orderStatus');
+    const container = document.getElementById('ordersContainer');
+
+    function applyFilters() {
+      const sortBy = sortSelect.value;
+      const direction = directionSelect.value;
+      const statusFilter = statusSelect.value;
+
+      let cards = Array.from(container.querySelectorAll('.order-card'));
+
+      // Filtrar por estado
+      cards.forEach(card => {
+        const matchesStatus = (statusFilter === 'all' || card.dataset.status === statusFilter);
+        card.style.display = matchesStatus ? '' : 'none';
+      });
+
+      // Ordenar (solo las visibles)
+      let visibleCards = cards.filter(card => card.style.display !== 'none');
+
+      visibleCards.sort((a, b) => {
+        let valA, valB;
+        if (sortBy === 'id') {
+          valA = parseInt(a.dataset.id);
+          valB = parseInt(b.dataset.id);
+        } else if (sortBy === 'total') {
+          valA = parseFloat(a.dataset.total);
+          valB = parseFloat(b.dataset.total);
+        } else if (sortBy === 'date') {
+          valA = parseInt(a.dataset.date);
+          valB = parseInt(b.dataset.date);
+        }
+        return direction === 'asc' ? valA - valB : valB - valA;
+      });
+
+      // Reinsertar en el contenedor
+      visibleCards.forEach(card => container.appendChild(card));
+
+
+  }
+
+  // Eventos
+  sortSelect.addEventListener('change', applyFilters);
+  directionSelect.addEventListener('change', applyFilters);
+  statusSelect.addEventListener('change', applyFilters);
+
+  // Inicial
+  applyFilters();
+</script>
 </body>
 </html>
