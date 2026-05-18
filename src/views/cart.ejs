@@ -70,7 +70,7 @@
                                             <div class="flex-grow-1">
 
                                                 <h5>
-                                                    <%= item.name %>
+                                                    <a style="text-decoration: none; color: black;" href="/product/<%= item.id %>"><%= item.name %></a>
                                                 </h5>
 
                                                 <div>
@@ -131,8 +131,11 @@
                                         message += `TOTAL: $${Number(total).toFixed(2)}\n\n`;
                                         message += `Gracias.`;
 
-                                        const whatsappUrl = `https://wa.me/5491126517287?text=${encodeURIComponent(message)}`;
-                                        %>
+                                        const whatsappNumber =
+                                            appSettings?.whatsapp || '';
+
+                                        const whatsappUrl =
+                                            `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;                                        %>
 
                                         <a
                                             target="_blank"
